@@ -1,7 +1,7 @@
 """Database connection and session management.
 
 Implements:
-  - Async SQLAlchemy engine with asyncpg
+  - Async SQLAlchemy engine with psycopg3
   - Session factory for dependency injection
   - Sync engine + create_tables() for schema creation (SSOT 02 §6.1, SSOT 09 §34.3)
 
@@ -9,7 +9,7 @@ No Alembic is used. Schema is created via SQLAlchemy.metadata.create_all().
 """
 from __future__ import annotations
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
@@ -38,11 +38,8 @@ async_session_factory = async_sessionmaker(
 # ---------------------------------------------------------------------------
 # Sync engine (used for create_tables / startup schema creation)
 # ---------------------------------------------------------------------------
-# Derive sync URL from the async URL (asyncpg -> psycopg2)
-_sync_url = settings.database_url.replace("asyncpg", "psycopg2")
-
 sync_engine = create_engine(
-    _sync_url,
+    settings.database_url,
     echo=settings.is_development,
     pool_pre_ping=True,
 )
@@ -97,11 +94,6 @@ def create_tables():
     """
     # Import models here to ensure they are registered on Base.metadata
     import common.models  # noqa: F401
-
-    # Ensure pgcrypto is available for gen_random_uuid()
-    with sync_engine.connect() as conn:
-        conn.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
-        conn.commit()
 
     # Create all tables — no Alembic, pure SQLAlchemy
     Base.metadata.create_all(bind=sync_engine)

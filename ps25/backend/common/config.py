@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     app_reload: bool = True
 
     # --- Database ---
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ps25"
+    database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/ps25"
 
     # --- JWT (python-jose) ---
     jwt_secret_key: str = "REPLACE_WITH_A_LONG_RANDOM_SECRET_STRING_AT_LEAST_32_CHARS"
@@ -82,18 +82,6 @@ settings = Settings()
 def get_settings() -> Settings:
     """Dependency provider for settings."""
     return settings
-
-
-# Ensure pgcrypto extension is available for UUID generation
-def ensure_pgcrypto_extension():
-    """The 'pgcrypto' extension must be enabled in the PostgreSQL database
-    to use gen_random_uuid(). This should be run as a migration step or
-    via the database setup script.
-
-    Execute in psql:
-        CREATE EXTENSION IF NOT EXISTS pgcrypto;
-    """
-    pass
 
 
 if __name__ == "__main__":
