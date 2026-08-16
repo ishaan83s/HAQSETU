@@ -56,5 +56,5 @@ coverage.xml
 *.cover
 
 # Exclude SSOT specification files from Git
-PS25_Modular_SSOTs_v1.0/
+PS25_Modular_SSOTs_v2.0/
 .clinerules
