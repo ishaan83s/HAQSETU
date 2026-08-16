@@ -1,0 +1,107 @@
+query,domain,intent
+Tenant rights grievance.,PROPERTY,TENANT_RIGHTS
+Loan app scam and fraud.,CYBER,ONLINE_FRAUD
+Online financial fraud complaint.,CYBER,ONLINE_FRAUD
+Kisi ne mera Aadhaar card aur PAN card chura kar fake loan le liya.,CYBER,IDENTITY_THEFT
+Cyber crime financial fraud.,CYBER,ONLINE_FRAUD
+Boss didn't pay my salary on time. It has been 45 days and no response.,LABOUR,UNPAID_WAGES
+Can a company void warranty for minor external scratches?,CONSUMER,WARRANTY
+Pending wages complaint process.,LABOUR,UNPAID_WAGES
+Overtime payment for extra hours.,LABOUR,WORKING_HOURS
+How to file a maintenance case against husband in India?,WOMEN,MAINTENANCE
+Rent dispute ke liye court ja sakte hain kya?,PROPERTY,RENT_DISPUTE
+Pending salary issue with startup.,LABOUR,UNPAID_WAGES
+Account hack hone par kahan report kare?,CYBER,ACCOUNT_HACKING
+Company is violating standard working hours limits and labor laws.,LABOUR,WORKING_HOURS
+Online shaming and cyberbullying issue.,CYBER,CYBERBULLYING
+Office me sexual harassment ke khilaf kahan complain kare?,WOMEN,SEXUAL_HARASSMENT
+Office harassment help.,LABOUR,WORKPLACE_HARASSMENT
+Job chali gayi achanak.,LABOUR,WRONGFUL_TERMINATION
+How to report cyberbullying and online stalking in India?,CYBER,CYBERBULLYING
+Warranty me hai product fir bhi free repair nahi kar rahe.,CONSUMER,WARRANTY
+Rent dispute legal advice.,PROPERTY,RENT_DISPUTE
+Tenant rights help.,PROPERTY,TENANT_RIGHTS
+My landlord is imposing unreasonable building rules only on tenants and not owners.,PROPERTY,TENANT_RIGHTS
+Wrongful dismissal from company.,LABOUR,WRONGFUL_TERMINATION
+Faulty goods grievance.,CONSUMER,DEFECTIVE_PRODUCT
+Rent agreement ka violation kar raha hai landlord.,PROPERTY,RENT_DISPUTE
+My AC under warranty is not being repaired despite multiple service requests.,CONSUMER,WARRANTY
+A user on Twitter is sending abusive slurs and harassing me continuously.,CYBER,CYBERBULLYING
+Tenant rights protect karne ke liye kya steps le?,PROPERTY,TENANT_RIGHTS
+I bought a brand new laptop yesterday and it stopped working completely today.,CONSUMER,DEFECTIVE_PRODUCT
+Defective item mila hai exchange nahi kar rahe.,CONSUMER,DEFECTIVE_PRODUCT
+Boss mentally harass kar raha hai.,LABOUR,WORKPLACE_HARASSMENT
+Account hacking FIR process.,CYBER,ACCOUNT_HACKING
+Domestic violence police complaint.,WOMEN,DOMESTIC_VIOLENCE
+Internet par harassment ho raha hai kya kare?,CYBER,CYBERBULLYING
+Defective purchase complaint.,CONSUMER,DEFECTIVE_PRODUCT
+What are my rights in a rent dispute with my landlord?,PROPERTY,RENT_DISPUTE
+A colleague touched me without consent at the office party.,WOMEN,SEXUAL_HARASSMENT
+The washing machine motor failed during warranty but the company refuses to honor it.,CONSUMER,WARRANTY
+Advance rent and deposit dispute.,PROPERTY,SECURITY_DEPOSIT
+Biometric data misuse issue.,CYBER,IDENTITY_THEFT
+Pati maintenance nahi de raha kharcha kaise chalega?,WOMEN,MAINTENANCE
+I am being cyberbullied and harassed by anonymous accounts on Instagram daily.,CYBER,CYBERBULLYING
+Can I file a police FIR for workplace sexual harassment?,WOMEN,SEXUAL_HARASSMENT
+Terminated without cause.,LABOUR,WRONGFUL_TERMINATION
+Company is bankrupt and hasn't paid salaries.,LABOUR,UNPAID_WAGES
+Can I file a police case for dowry harassment against my husband?,WOMEN,DOWRY
+Workplace harassment complaint procedure.,LABOUR,WORKPLACE_HARASSMENT
+Can I file a complaint for non-payment of wages?,LABOUR,UNPAID_WAGES
+My employer demands 16 hours of work daily.,LABOUR,WORKING_HOURS
+Hacking complaint procedure.,CYBER,ACCOUNT_HACKING
+Domestic violence protection order request.,WOMEN,DOMESTIC_VIOLENCE
+Reporting workplace harassment in India.,LABOUR,WORKPLACE_HARASSMENT
+Paisa wapas nahi kar raha hai.,CONSUMER,REFUND
+Warranty dispute resolution.,CONSUMER,WARRANTY
+Online shopping ka refund nahi mil raha.,CONSUMER,REFUND
+The landlord is refusing to provide rent receipts despite multiple requests for tax filing.,PROPERTY,TENANT_RIGHTS
+Malkin restriction laga raha hai guest lane par.,PROPERTY,TENANT_RIGHTS
+A scammer pretended to be a bank official and stole my net banking credentials.,CYBER,ONLINE_FRAUD
+Account hacking legal action.,CYBER,ACCOUNT_HACKING
+Security deposit case consumer court or civil court?,PROPERTY,SECURITY_DEPOSIT
+Office me mere sath harassment ho raha hai senior dwara.,LABOUR,WORKPLACE_HARASSMENT
+Someone used my stolen driving license to register a fraudulent SIM card.,CYBER,IDENTITY_THEFT
+Someone made unauthorized transactions on my credit card through a cloned website.,CYBER,ONLINE_FRAUD
+Dowry case legal procedure in India.,WOMEN,DOWRY
+How to report a defective product bought online?,CONSUMER,DEFECTIVE_PRODUCT
+Can an employer be punished for ignoring sexual harassment complaints?,WOMEN,SEXUAL_HARASSMENT
+Bina notice ke job se nikal diya mujhko.,LABOUR,WRONGFUL_TERMINATION
+Can I take legal action against someone stealing my identity?,CYBER,IDENTITY_THEFT
+Security deposit deduction grievance.,PROPERTY,SECURITY_DEPOSIT
+Advance deposit dispute.,PROPERTY,SECURITY_DEPOSIT
+We have a dispute over electricity bill calculations and maintenance charges with our landlord.,PROPERTY,RENT_DISPUTE
+Factory owner is not giving weekly wages.,LABOUR,UNPAID_WAGES
+How to file a dowry harassment complaint in India?,WOMEN,DOWRY
+My husband has stopped sending money for household expenses and children's school fees.,WOMEN,MAINTENANCE
+Instagram account hack ho gaya recover kaise kare?,CYBER,ACCOUNT_HACKING
+Refund not processed by merchant.,CONSUMER,REFUND
+Roz overtime karwate hain.,LABOUR,WORKING_HOURS
+Phishing scam money theft complaint.,CYBER,ONLINE_FRAUD
+Mujhe kal hi job se hata diya bina bataye.,LABOUR,WRONGFUL_TERMINATION
+Can a merchant have a strict no-refund policy on defective goods?,CONSUMER,REFUND
+Extra ghante kaam karwate hain.,LABOUR,WORKING_HOURS
+Maintenance claim procedure.,WOMEN,MAINTENANCE
+Account hack ka complaint kaise kare?,CYBER,ACCOUNT_HACKING
+Pati aur ससुराल wale mujhe marte hain aur pareshan karte hain.,WOMEN,DOMESTIC_VIOLENCE
+My employer fired me suddenly today without any prior notice or valid reason.,LABOUR,WRONGFUL_TERMINATION
+Landlord security deposit legal help.,PROPERTY,SECURITY_DEPOSIT
+POSH committee complaint process.,WOMEN,SEXUAL_HARASSMENT
+My senior manager at the office is making unwanted sexual advances and passing vulgar comments.,WOMEN,SEXUAL_HARASSMENT
+My husband is demanding cash in the name of dowry before letting me return home.,WOMEN,DOWRY
+Boss gaali deta hai office me.,LABOUR,WORKPLACE_HARASSMENT
+Severe domestic violence threat case.,WOMEN,DOMESTIC_VIOLENCE
+Can my boss force me to work overtime?,LABOUR,WORKING_HOURS
+Dahej doge tabhi ghar aane denge bol rahe hain.,WOMEN,DOWRY
+Cyberbullying ke khilaf kahan report kare?,CYBER,CYBERBULLYING
+My landlord is demanding extra charges not mentioned in the rent deed.,PROPERTY,RENT_DISPUTE
+How can I claim a refund for a cancelled service?,CONSUMER,REFUND
+Maintenance delay court dispute.,WOMEN,MAINTENANCE
+Business identity theft report.,CYBER,IDENTITY_THEFT
+I am subjected to severe mental torture and physical abuse by my spouse every day.,WOMEN,DOMESTIC_VIOLENCE
+My inverter broke during warranty period and the dealer is ignoring my calls.,CONSUMER,WARRANTY
+Security deposit dispute resolution.,PROPERTY,SECURITY_DEPOSIT
+Tenant right to rent receipts.,PROPERTY,TENANT_RIGHTS
+Service refund dispute.,CONSUMER,REFUND
+Identity theft legal process.,CYBER,IDENTITY_THEFT
+Kharab item bhej diya.,CONSUMER,DEFECTIVE_PRODUCT
