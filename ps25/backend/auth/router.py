@@ -5,14 +5,22 @@ Implements the frozen public authentication endpoints:
 - POST /auth/request-otp
 - POST /auth/verify-otp
 
+Also provides the reusable JWT authentication dependency:
+
+- get_current_user
+
 Business logic remains in auth.service.
 This module is responsible only for HTTP routing, dependency wiring,
-response-envelope composition, and response-model validation.
+authentication dependency handling, response-envelope composition,
+and response-model validation.
 """
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, Header
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.schemas import OtpRequest, OtpResponse, OtpVerifyRequest, TokenResponse
@@ -20,15 +28,18 @@ from auth.service import (
     create_access_token,
     get_or_create_user,
     normalize_phone_number,
+    validate_token,
     verify_otp,
 )
 from common.db import get_async_session
+from common.exceptions import AuthException, ErrorCode
+from common.models import User
 from common.response import APIResponse, success_response
 
 
 router = APIRouter(
     prefix="/auth",
-    tags=["auth"],
+    tags=["Authentication"],
 )
 
 
@@ -40,12 +51,7 @@ router = APIRouter(
 async def request_otp(
     request: OtpRequest,
 ) -> APIResponse[OtpResponse]:
-    """Validate the phone number and acknowledge the mock OTP request.
-
-    The MVP does not send a real SMS. The service only normalizes and
-    validates the supplied phone number; the actual OTP value remains
-    internal to the mock authentication flow.
-    """
+    """Validate the phone number and acknowledge the mock OTP request."""
 
     normalize_phone_number(request.phone_number)
 
@@ -88,4 +94,44 @@ async def verify_otp_endpoint(
     )
 
 
-__all__ = ["router"]
+async def get_current_user(
+    authorization: str | None = Header(default=None),
+    db: AsyncSession = Depends(get_async_session),
+) -> User:
+    """Resolve the authenticated user from a Bearer JWT.
+
+    Required malformed-header cases all map to UNAUTHORIZED.
+    JWT validation itself is delegated to auth.service.validate_token().
+    """
+
+    if authorization is None:
+        raise AuthException(code=ErrorCode.UNAUTHORIZED)
+
+    parts = authorization.split(" ")
+
+    if len(parts) != 2:
+        raise AuthException(code=ErrorCode.UNAUTHORIZED)
+
+    scheme, token = parts
+
+    if scheme != "Bearer" or not token:
+        raise AuthException(code=ErrorCode.UNAUTHORIZED)
+
+    user_id: UUID = validate_token(token)
+
+    result = await db.execute(
+        select(User).where(User.id == user_id)
+    )
+
+    user = result.scalar_one_or_none()
+
+    if user is None:
+        raise AuthException(code=ErrorCode.UNAUTHORIZED)
+
+    return user
+
+
+__all__ = [
+    "router",
+    "get_current_user",
+]
