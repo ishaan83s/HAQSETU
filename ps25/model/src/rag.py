@@ -76,6 +76,6 @@ def answer_query(query, top_k=5):
 
 # Test it
 if __name__ == "__main__":
-    result = answer_query("My company hasn't paid my salary for three months.")
+    result = answer_query("My Boss is not paying me.")
     print("ANSWER:\n", result["answer"])
     print("\nSOURCES:\n", result["sources"])
