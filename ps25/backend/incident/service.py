@@ -258,7 +258,7 @@ async def create_incident(
         {"type": issue.type, "confidence": issue.confidence}
         for issue in triage_result.issues
     ]
-    response_cards_db = triage_result.cards.model_dump(by_alias=True)
+    response_cards_db = triage_result.cards.model_dump(by_alias=True, mode="json")
 
     db_triage = TriageResult(
         id=uuid.uuid4(),

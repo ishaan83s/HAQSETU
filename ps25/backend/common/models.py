@@ -240,7 +240,7 @@ class LegalSource(Base):
         nullable=False,
     )
     section: Mapped[str | None] = Column(
-        String(100),
+        String(300),
         nullable=True,
     )
     domain: Mapped[str] = Column(
@@ -260,7 +260,7 @@ class LegalSource(Base):
         nullable=True,
     )
     version_label: Mapped[str | None] = Column(
-        String(50),
+        String(150),
         nullable=True,
     )
 

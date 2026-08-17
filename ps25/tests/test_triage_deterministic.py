@@ -9,7 +9,7 @@ import pytest
 from triage.classification import classify_issue
 from triage.exceptions import RetrievalError
 from triage.extraction import extract_fields
-from triage.retrieval import is_ready, retrieve
+from triage.retrieval import _embedding, is_ready, retrieve
 from triage.schemas import (
     GeneratedClaim,
     GenerationDraft,
@@ -79,8 +79,16 @@ async def test_unsupported_skips_missing_index():
 
 
 @pytest.mark.asyncio
-async def test_supported_request_requires_curated_index():
-    assert not is_ready()
+async def test_supported_request_requires_curated_index(monkeypatch):
+    _embedding()
+    assert is_ready()
+    result = await retrieve(
+        incident_text="My wages were withheld",
+        understanding=understanding([issue("wage_nonpayment", 0.9)]),
+    )
+    assert len(result.results) > 0
+
+    monkeypatch.setattr("triage.retrieval.load_index", lambda: False)
     with pytest.raises(RetrievalError):
         await retrieve(
             incident_text="My wages were withheld",
