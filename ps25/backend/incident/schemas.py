@@ -6,7 +6,7 @@ from datetime import date
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class IncidentRequest(BaseModel):
@@ -17,34 +17,10 @@ class IncidentRequest(BaseModel):
         extra="forbid",
     )
 
-    input_mode: Literal["text", "voice"] = Field(alias="inputMode")
-    language: Literal["hi", "en"]
+    input_mode: str = Field(alias="inputMode")
+    language: str
     text: str | None = None
     audio_base64: str | None = Field(default=None, alias="audioBase64")
-
-    @model_validator(mode="after")
-    def validate_input_representation(self) -> "IncidentRequest":
-        """Enforce the frozen text/voice representation invariant."""
-
-        has_text = self.text is not None
-        has_audio = self.audio_base64 is not None
-
-        if has_text == has_audio:
-            raise ValueError(
-                "Exactly one of text or audioBase64 must be provided."
-            )
-
-        if self.input_mode == "text" and not has_text:
-            raise ValueError(
-                "inputMode 'text' requires text and forbids audioBase64."
-            )
-
-        if self.input_mode == "voice" and not has_audio:
-            raise ValueError(
-                "inputMode 'voice' requires audioBase64 and forbids text."
-            )
-
-        return self
 
 
 class UserContextDTO(BaseModel):
