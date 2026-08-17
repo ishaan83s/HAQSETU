@@ -1,4 +1,7 @@
 import type { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import AppShell from '@/components/AppShell'
+import { Button } from '@/components/ui/button'
 import { mockResult } from './mockResult'
 import UrgencyBanner from './components/UrgencyBanner'
 import EvidenceChecklist from './components/EvidenceChecklist'
@@ -7,44 +10,166 @@ import OfficialResources from './components/OfficialResources'
 
 type ResultSectionProps = {
   title: string
+  subtitle?: string
+  icon?: ReactNode
   children: ReactNode
 }
 
-function ResultSection({ title, children }: ResultSectionProps) {
+function ResultSection({
+  title,
+  subtitle,
+  icon,
+  children,
+}: ResultSectionProps) {
   return (
-    <section>
-      <h2>{title}</h2>
+    <section className="rounded-xl border bg-card p-5 sm:p-6 text-card-foreground shadow-sm">
+      <div className="flex items-center gap-2.5 mb-3">
+        {icon && (
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            {icon}
+          </div>
+        )}
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          {subtitle && (
+            <p className="text-xs text-muted-foreground">{subtitle}</p>
+          )}
+        </div>
+      </div>
       {children}
     </section>
   )
 }
 
 export default function ResultsPage() {
+  const navigate = useNavigate()
+
   return (
-    <main>
-      <p>HAQSETU Legal Awareness Result</p>
+    <AppShell>
+      <div className="space-y-6 pb-12">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-5">
+          <div>
+            <div className="inline-flex items-center gap-2 mb-1.5">
+              <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                HAQSETU Legal Awareness
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Here is your next-step guide
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Personalized legal awareness, evidence preservation, and verified
+              resources.
+            </p>
+          </div>
 
-      <h1>Here is a clear next-step guide</h1>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.print()}
+              className="text-xs"
+            >
+              <svg
+                className="mr-1.5 h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 6 2 18 2 18 9" />
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                <rect width="12" height="8" x="6" y="14" />
+              </svg>
+              Print / Save
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => navigate('/incident')}
+              className="text-xs"
+            >
+              New Query
+            </Button>
+          </div>
+        </div>
 
-      <UrgencyBanner
-        urgency={mockResult.urgency}
-        message={mockResult.urgencyMessage}
-      />
+        {/* Urgency Alert Banner */}
+        <UrgencyBanner
+          urgency={mockResult.urgency}
+          message={mockResult.urgencyMessage}
+        />
 
-      <ResultSection title="What we understood">
-        <p>{mockResult.incidentSummary}</p>
-        <p>{mockResult.possibleIssue}</p>
-      </ResultSection>
+        {/* What We Understood Section */}
+        <ResultSection
+          title="What We Understood"
+          subtitle="Summary of your situation and potential legal considerations"
+          icon={
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          }
+        >
+          <div className="space-y-3 text-sm text-foreground/90">
+            <div className="rounded-lg bg-muted/40 p-3.5 border border-border/50">
+              <p className="font-medium text-foreground mb-1 text-xs uppercase tracking-wider text-muted-foreground">
+                Incident Overview
+              </p>
+              <p className="leading-relaxed">{mockResult.incidentSummary}</p>
+            </div>
+            <div className="rounded-lg bg-muted/40 p-3.5 border border-border/50">
+              <p className="font-medium text-foreground mb-1 text-xs uppercase tracking-wider text-muted-foreground">
+                Key Considerations
+              </p>
+              <p className="leading-relaxed">{mockResult.possibleIssue}</p>
+            </div>
+          </div>
+        </ResultSection>
 
-      <EvidenceChecklist items={mockResult.evidenceChecklist} />
+        {/* Evidence Preservation Checklist */}
+        <EvidenceChecklist items={mockResult.evidenceChecklist} />
 
-      <NextStepsList steps={mockResult.nextSteps} />
+        {/* Actionable Next Steps */}
+        <NextStepsList steps={mockResult.nextSteps} />
 
-      <OfficialResources resources={mockResult.officialResources} />
+        {/* Official Resources */}
+        <OfficialResources resources={mockResult.officialResources} />
 
-      <ResultSection title="Important">
-        <p>{mockResult.disclaimer}</p>
-      </ResultSection>
-    </main>
+        {/* Legal Disclaimer */}
+        <div className="rounded-xl border border-muted-foreground/20 bg-muted/30 p-4 text-xs leading-relaxed text-muted-foreground">
+          <div className="flex items-start gap-2.5">
+            <svg
+              className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <p>
+              <strong className="font-semibold text-foreground">
+                Disclaimer:{' '}
+              </strong>
+              {mockResult.disclaimer}
+            </p>
+          </div>
+        </div>
+      </div>
+    </AppShell>
   )
 }
