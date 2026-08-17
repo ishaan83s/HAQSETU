@@ -1,4 +1,9 @@
 import type { ReactNode } from 'react'
+import { mockResult } from './mockResult'
+import UrgencyBanner from './components/UrgencyBanner'
+import EvidenceChecklist from './components/EvidenceChecklist'
+import NextStepsList from './components/NextStepsList'
+import OfficialResources from './components/OfficialResources'
 
 type ResultSectionProps = {
   title: string
@@ -21,24 +26,24 @@ export default function ResultsPage() {
 
       <h1>Here is a clear next-step guide</h1>
 
+      <UrgencyBanner
+        urgency={mockResult.urgency}
+        message={mockResult.urgencyMessage}
+      />
+
       <ResultSection title="What we understood">
-        <p>
-          You described a situation that may need legal awareness and support.
-        </p>
+        <p>{mockResult.incidentSummary}</p>
+        <p>{mockResult.possibleIssue}</p>
       </ResultSection>
 
-      <ResultSection title="What you can do next">
-        <ol>
-          <li>Keep any messages, documents, photos, or recordings safe.</li>
-          <li>Write down dates, names, locations, and what happened.</li>
-          <li>Contact an appropriate official service or legal-aid provider.</li>
-        </ol>
-      </ResultSection>
+      <EvidenceChecklist items={mockResult.evidenceChecklist} />
+
+      <NextStepsList steps={mockResult.nextSteps} />
+
+      <OfficialResources resources={mockResult.officialResources} />
 
       <ResultSection title="Important">
-        <p>
-          HAQSETU provides legal awareness, not legal advice or representation.
-        </p>
+        <p>{mockResult.disclaimer}</p>
       </ResultSection>
     </main>
   )
