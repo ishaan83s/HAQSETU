@@ -5,9 +5,9 @@ All values are read from .env or the deployment environment.
 """
 from __future__ import annotations
 
-import os
 from typing import List
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -19,7 +19,10 @@ class Settings(BaseSettings):
       - JWT library: python-jose (python-jose[cryptography])
       - JWT algorithm: HS256
       - JWT secret: from environment variable
-      - JWT lifetime: 30 days
+      - JWT lifetime: 7 days
+    - Phone normalization: strip spaces/dashes, prepend +91 for bare
+    10-digit Indian numbers, then validate against the frozen E.164-like
+    India-only pattern
       - Phone normalization: strip non-digits, validate 10-digit Indian
       - OTP mock value: 123456 (6 digits, development only)
       - CORS: dev origin localhost:5173, prod via FRONTEND_URL env
@@ -38,12 +41,16 @@ class Settings(BaseSettings):
     app_reload: bool = True
 
     # --- Database ---
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ps25"
+    database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/ps25"
 
     # --- JWT (python-jose) ---
-    jwt_secret_key: str = "REPLACE_WITH_A_LONG_RANDOM_SECRET_STRING_AT_LEAST_32_CHARS"
+    # JWT_SECRET is required by the frozen environment-variable registry.
+    jwt_secret_key: str = Field(
+        ...,
+        validation_alias="JWT_SECRET",
+    )
     jwt_algorithm: str = "HS256"
-    jwt_access_token_expire_days: int = 30
+    jwt_access_token_expire_days: int = 7
 
     # --- CORS ---
     frontend_url: str = "http://localhost:5173"
@@ -56,6 +63,12 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api"
     openrouter_model: str = "meta-llama/llama-70b-chat:latest"
+    openrouter_model_primary: str = Field(
+        ..., validation_alias="OPENROUTER_MODEL_PRIMARY"
+    )
+    openrouter_model_fallback: str = Field(
+        ..., validation_alias="OPENROUTER_MODEL_FALLBACK"
+    )
 
     # --- Derived properties ---
 
@@ -82,18 +95,6 @@ settings = Settings()
 def get_settings() -> Settings:
     """Dependency provider for settings."""
     return settings
-
-
-# Ensure pgcrypto extension is available for UUID generation
-def ensure_pgcrypto_extension():
-    """The 'pgcrypto' extension must be enabled in the PostgreSQL database
-    to use gen_random_uuid(). This should be run as a migration step or
-    via the database setup script.
-
-    Execute in psql:
-        CREATE EXTENSION IF NOT EXISTS pgcrypto;
-    """
-    pass
 
 
 if __name__ == "__main__":
