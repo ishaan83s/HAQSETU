@@ -4,9 +4,10 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
+import joblib
 
 CHUNKS_DIR = "ps25/model/data/legalstuff/chunks"
-
+CLASSIFIER_DIR = "ps25/model/data/classifier"
 # ---- Setup (same as retrieval.py) ----
 records = []
 with open(f"{CHUNKS_DIR}/legal_chunks.jsonl", "r", encoding="utf-8") as f:
@@ -21,14 +22,41 @@ index.add(embeddings)
 
 embed_model = SentenceTransformer("all-MiniLM-L6-v2")
 
+vectorizer = joblib.load(f"{CLASSIFIER_DIR}/tfidf_vectorizer.joblib")
+intent_model = joblib.load(f"{CLASSIFIER_DIR}/intent_classifier.joblib")
+intent_to_domain = joblib.load(f"{CLASSIFIER_DIR}/intent_to_domain.joblib")
+
 # ---- CoE Gateway client (OpenAI-compatible) ----
-# NOTE: replace base_url below with the actual endpoint URL from the CoE gateway docs/DM reply
 client = OpenAI(
     api_key=os.environ["COE_API_KEY"],
     base_url="https://ai.tcetcercd.in/v1",
 )
+def predict_domain(query):
+    X = vectorizer.transform([query])
+    predicted_intent = intent_model.predict(X)[0]
+    domain = intent_to_domain.get(predicted_intent)
+    return domain, predicted_intent
 
-def retrieve(query, top_k=5):
+def retrieve(query, top_k=5, use_domain_filter=True):
+    domain = None
+    if use_domain_filter:
+        domain, predicted_intent = predict_domain(query)
+        print(f"[classifier] predicted intent: {predicted_intent} -> domain: {domain}")
+
+    if domain:
+        # Only search among chunks matching the predicted domain
+        domain_indices = [i for i, r in enumerate(records) if r["domain"] == domain]
+        if domain_indices:
+            domain_embeddings = embeddings[domain_indices]
+            temp_index = faiss.IndexFlatL2(domain_embeddings.shape[1])
+            temp_index.add(domain_embeddings)
+
+            query_vector = embed_model.encode([query])
+            k = min(top_k, len(domain_indices))
+            distances, local_idx = temp_index.search(query_vector, k)
+            return [records[domain_indices[i]] for i in local_idx[0]]
+
+    # Fallback: no domain predicted, or no chunks in that domain -> search everything
     query_vector = embed_model.encode([query])
     distances, indices = index.search(query_vector, top_k)
     return [records[idx] for idx in indices[0]]
