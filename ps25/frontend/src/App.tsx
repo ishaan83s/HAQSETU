@@ -4,6 +4,7 @@ import Onboarding from "./pages/Onboarding"
 import Login from "./pages/Login"
 import Context from "./pages/Context"
 import Incident from "./pages/Incident"
+import ResultsPage from "./features/results/ResultsPage"
 
 function App() {
   return (
@@ -14,10 +15,13 @@ function App() {
         <Route path="/context" element={<Context />} />
         <Route path="/incident" element={<Incident />} />
 
-        {/* P4 result page — your teammate will implement this */}
         <Route
           path="/result/:incidentId"
-          element={<div>Result</div>}
+          element={<ResultsPage />}
+        />
+        <Route
+          path="/results"
+          element={<ResultsPage />}
         />
 
         <Route path="*" element={<Navigate to="/" replace />} />
