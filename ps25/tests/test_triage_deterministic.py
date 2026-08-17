@@ -130,7 +130,38 @@ def test_validation_rejects_forbidden_certainty_when_grounded():
         retrieval=retrieval,
     )
     assert result.cards.what_may_protect_you == []
-    assert result.cards.what_you_can_do_next[0].source == source
+    resolved_source = result.cards.what_you_can_do_next[0].source
+    assert resolved_source.jurisdiction_state is None
+    assert resolved_source.title == source.title
+    assert resolved_source.section == source.section
+    assert resolved_source.source_url == source.source_url
+
+
+def test_validation_retains_maharashtra_source_jurisdiction():
+    source = LegalSource(
+        title="Maharashtra source",
+        section="2",
+        jurisdictionState="Maharashtra",
+        sourceUrl="https://example.invalid/maharashtra",
+    )
+    result = validate(
+        understanding=understanding([issue("wage_nonpayment", 0.9)]),
+        draft=GenerationDraft(
+            whatMayBeHappening={"text": "Wages may be unpaid."},
+            whatMayProtectYou=[GeneratedClaim(
+                text="The cited provision states this may require review.",
+                sourceId="source-1",
+            )],
+            whatYouCanDoNext=[],
+        ),
+        retrieval=RetrievalResult(results=[RetrievedChunk(
+            source=source,
+            sourceId="source-1",
+            passage="Curated passage",
+            score=0.9,
+        )]),
+    )
+    assert result.cards.what_may_protect_you[0].source.jurisdiction_state == "Maharashtra"
 
 
 def test_frozen_system_prompts_are_present():

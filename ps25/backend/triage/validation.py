@@ -39,7 +39,10 @@ def validate(*, understanding: UnderstandingResult, draft: GenerationDraft, retr
                 continue
             if FORBIDDEN.search(claim.text):
                 continue
-            resolved.append(ClaimWithSource(text=claim.text, source=sources[claim.source_id]))
+            source = sources[claim.source_id]
+            if source.jurisdiction_state == "central":
+                source = source.model_copy(update={"jurisdiction_state": None})
+            resolved.append(ClaimWithSource(text=claim.text, source=source))
         return resolved
 
     return TriageResult(
