@@ -23,13 +23,21 @@ function Onboarding() {
             happening and what you can do next.
           </p>
 
-          <Button
-            size="lg"
-            className="mt-8"
-            onClick={() => navigate("/login")}
-          >
-            Get started
-          </Button>
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button
+              size="lg"
+              onClick={() => navigate("/incident")}
+            >
+              Start Intake Flow
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/results")}
+            >
+              View Results Demo
+            </Button>
+          </div>
         </div>
       </section>
     </AppShell>
