@@ -5,7 +5,6 @@ All values are read from .env or the deployment environment.
 """
 from __future__ import annotations
 
-import os
 from typing import List
 
 from pydantic import Field
@@ -64,6 +63,12 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api"
     openrouter_model: str = "meta-llama/llama-70b-chat:latest"
+    openrouter_model_primary: str = Field(
+        ..., validation_alias="OPENROUTER_MODEL_PRIMARY"
+    )
+    openrouter_model_fallback: str = Field(
+        ..., validation_alias="OPENROUTER_MODEL_FALLBACK"
+    )
 
     # --- Derived properties ---
 
