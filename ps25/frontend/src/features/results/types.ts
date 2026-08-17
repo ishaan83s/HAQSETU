@@ -11,6 +11,11 @@ export type OfficialResource = {
   url: string
 }
 
+export type LegalAid = {
+  name: string
+  contactInfo: string
+}
+
 export type LegalAwarenessResult = {
   incidentSummary: string
   possibleIssue: string
@@ -19,5 +24,6 @@ export type LegalAwarenessResult = {
   evidenceChecklist: string[]
   nextSteps: NextStep[]
   officialResources: OfficialResource[]
+  legalAid: LegalAid
   disclaimer: string
 }

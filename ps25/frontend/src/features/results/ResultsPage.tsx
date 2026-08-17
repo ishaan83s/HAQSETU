@@ -1,13 +1,15 @@
-import { useState, type ReactNode } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState, type ReactNode } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import AppShell from '@/components/AppShell'
 import { Button } from '@/components/ui/button'
-import { mockResult, sampleScenarios } from './mockResult'
+import { getIncident } from '@/lib/incidents'
+import { adaptIncidentResult } from './incidentAdapter'
 import type { LegalAwarenessResult } from './types'
 import UrgencyBanner from './components/UrgencyBanner'
 import EvidenceChecklist from './components/EvidenceChecklist'
 import NextStepsList from './components/NextStepsList'
 import OfficialResources from './components/OfficialResources'
+import LegalAidCard from './components/LegalAidCard'
 
 type ResultSectionProps = {
   title: string
@@ -45,17 +47,102 @@ function ResultSection({
 export default function ResultsPage() {
   const navigate = useNavigate()
   const { incidentId } = useParams<{ incidentId?: string }>()
-  const location = useLocation()
+  const [result, setResult] = useState<LegalAwarenessResult | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
 
-  // State to support dynamic incident results and interactive demo scenarios
-  const [selectedScenarioKey, setSelectedScenarioKey] =
-    useState<string>('wage_nonpayment')
+  useEffect(() => {
+    if (!incidentId) {
+      setError("We couldn't find this incident.")
+      setIsLoading(false)
+      return
+    }
 
-  const passedResult = (location.state as { result?: LegalAwarenessResult })
-    ?.result
+    const currentIncidentId = incidentId
+    let cancelled = false
 
-  const activeResult: LegalAwarenessResult =
-    passedResult || sampleScenarios[selectedScenarioKey]?.data || mockResult
+    async function loadIncident() {
+      setIsLoading(true)
+      setError("")
+
+      try {
+        const response = await getIncident(currentIncidentId)
+
+        if (!response.success || !response.data) {
+          if (!cancelled) {
+            setError(
+              response.error?.message ??
+                "We couldn't load your result. Please try again.",
+            )
+          }
+          return
+        }
+
+        if (!cancelled) {
+          setResult(adaptIncidentResult(response.data))
+        }
+      } catch {
+        if (!cancelled) {
+          setError(
+            "We couldn't connect to the service. Please try again.",
+          )
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    void loadIncident()
+
+    return () => {
+      cancelled = true
+    }
+  }, [incidentId])
+
+  const activeResult = result
+
+  if (isLoading) {
+    return (
+      <AppShell>
+        <div className="flex min-h-[60vh] items-center justify-center px-4">
+          <div className="text-center">
+            <div className="mb-4 text-4xl">⏳</div>
+            <h1 className="text-2xl font-semibold">
+              Preparing your result
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Please wait while we load your legal-awareness guidance.
+            </p>
+          </div>
+        </div>
+      </AppShell>
+    )
+  }
+
+  if (error || !activeResult) {
+    return (
+      <AppShell>
+        <div className="flex min-h-[60vh] items-center justify-center px-4">
+          <div className="w-full max-w-md text-center">
+            <h1 className="text-2xl font-semibold">
+              We couldn't load your result
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {error || "Please try again."}
+            </p>
+            <Button
+              className="mt-6"
+              onClick={() => navigate("/incident")}
+            >
+              Start a New Query
+            </Button>
+          </div>
+        </div>
+      </AppShell>
+    )
+  }
 
   return (
     <AppShell>
@@ -114,28 +201,6 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        {/* Interactive Scenario Switcher for Demo / SIH Testing */}
-        {!passedResult && (
-          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border/70 bg-muted/20 p-2.5">
-            <span className="text-xs font-medium text-muted-foreground mr-1">
-              Sample Case Scenarios:
-            </span>
-            {Object.entries(sampleScenarios).map(([key, scenario]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedScenarioKey(key)}
-                className={`rounded-md px-3 py-1 text-xs font-medium transition-all ${
-                  selectedScenarioKey === key
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'bg-background hover:bg-muted text-muted-foreground hover:text-foreground border border-border/60'
-                }`}
-              >
-                {scenario.label}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Urgency Alert Banner */}
         <UrgencyBanner
           urgency={activeResult.urgency}
@@ -186,6 +251,9 @@ export default function ResultsPage() {
 
         {/* Official Resources */}
         <OfficialResources resources={activeResult.officialResources} />
+
+        {/* Legal Aid */}
+        <LegalAidCard legalAid={activeResult.legalAid} />
 
         {/* Legal Disclaimer */}
         <div className="rounded-xl border border-muted-foreground/20 bg-muted/30 p-4 text-xs leading-relaxed text-muted-foreground">
