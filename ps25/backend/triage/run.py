@@ -34,4 +34,6 @@ async def run(*, input_mode: Literal["text", "voice"], text: str | None, audio_b
     understanding = await understand(incident_text=incident_text, language=language, user_context=user_context)
     retrieval = await retrieve(incident_text=incident_text, understanding=understanding)
     draft = await generate(incident_text=incident_text, language=language, understanding=understanding, retrieval=retrieval)
-    return validate(understanding=understanding, draft=draft, retrieval=retrieval)
+    result = validate(understanding=understanding, draft=draft, retrieval=retrieval)
+    result.transcript = incident_text
+    return result

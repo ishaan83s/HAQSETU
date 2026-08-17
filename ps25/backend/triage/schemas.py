@@ -95,6 +95,7 @@ class TriageCards(BaseModel):
 
 class TriageResult(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
+    transcript: str = ""
     issues: list[IssueLabel]
     actor: str | None = None
     jurisdiction_state: Literal["Maharashtra"] | None = Field(
