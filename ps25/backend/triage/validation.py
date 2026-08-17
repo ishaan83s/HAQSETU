@@ -38,7 +38,7 @@ def validate(*, understanding: UnderstandingResult, draft: GenerationDraft, retr
             if claim.source_id not in sources:
                 continue
             if FORBIDDEN.search(claim.text):
-                raise GenerationError("Generated claim used forbidden certainty language")
+                continue
             resolved.append(ClaimWithSource(text=claim.text, source=sources[claim.source_id]))
         return resolved
 

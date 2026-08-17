@@ -1,4 +1,3 @@
-import asyncio
 import os
 
 os.environ.setdefault("JWT_SECRET", "test-secret")
@@ -15,7 +14,9 @@ from triage.schemas import (
     GeneratedClaim,
     GenerationDraft,
     IssueLabel,
+    LegalSource,
     RetrievalResult,
+    RetrievedChunk,
     UnderstandingResult,
 )
 from triage.stt import is_near_empty
@@ -102,10 +103,41 @@ def test_validation_drops_unknown_sources_and_preserves_grounded_cards():
 
 
 def test_validation_rejects_forbidden_certainty_when_grounded():
-    # Source resolution is independently exercised by schema/validation tests once
-    # curated retrieval fixtures are available; this test keeps the no-source path
-    # deterministic without manufacturing legal corpus data.
-    assert asyncio.run(retrieve(
-        incident_text="Other concern",
-        understanding=understanding([issue("unsupported", 1.0)]),
-    )).results == []
+    source = LegalSource(
+        title="Curated source",
+        section="1",
+        jurisdictionState="central",
+        sourceUrl="https://example.invalid/source",
+    )
+    retrieval = RetrievalResult(results=[RetrievedChunk(
+        source=source,
+        sourceId="source-1",
+        passage="Curated passage",
+        score=0.9,
+    )])
+    draft = GenerationDraft(
+        whatMayBeHappening={"text": "Wages may be unpaid."},
+        whatMayProtectYou=[GeneratedClaim(
+            text="You have the right to unpaid wages.", sourceId="source-1"
+        )],
+        whatYouCanDoNext=[GeneratedClaim(
+            text="The cited provision states this may require review.", sourceId="source-1"
+        )],
+    )
+    result = validate(
+        understanding=understanding([issue("wage_nonpayment", 0.9)]),
+        draft=draft,
+        retrieval=retrieval,
+    )
+    assert result.cards.what_may_protect_you == []
+    assert result.cards.what_you_can_do_next[0].source == source
+
+
+def test_frozen_system_prompts_are_present():
+    from triage.generation import SYSTEM_PROMPT as generation_prompt
+    from triage.understanding import SYSTEM_PROMPT as understanding_prompt
+
+    assert "You extract structured facts and classify the legal issue" in understanding_prompt
+    assert "If nothing reaches 0.5" in understanding_prompt
+    assert "You are the triage reasoning component of PS-25" in generation_prompt
+    assert "Every sentence in \"whatMayProtectYou\"" in generation_prompt
