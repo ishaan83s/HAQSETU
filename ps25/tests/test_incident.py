@@ -1265,3 +1265,303 @@ def test_get_incident_empty_claims_and_evidence_lifecycle(monkeypatch):
     }
 
 
+# ---------------------------------------------------------------------------
+# Integration Tests: Auth, Evidence & Legal Aid Routers
+# ---------------------------------------------------------------------------
+
+
+def test_api_auth_request_otp_success_200():
+    """Test POST /auth/request-otp with valid phone returns HTTP 200 with otpSent=True envelope."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "+919876543210"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"otpSent": True}
+    assert body["error"] is None
+
+
+def test_api_auth_request_otp_bare_10_digits_normalizes_and_succeeds_200():
+    """Test POST /auth/request-otp with bare 10-digit phone normalizes to +91 and succeeds."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "9876543210"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"otpSent": True}
+    assert body["error"] is None
+
+
+def test_api_auth_request_otp_invalid_phone_422():
+    """Test POST /auth/request-otp with invalid phone number returns HTTP 422 INVALID_PHONE."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "12345"},
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_PHONE"
+
+
+def test_api_auth_verify_otp_success_200(monkeypatch):
+    """Test POST /auth/verify-otp with valid phone and mock OTP returns HTTP 200 with token and userId."""
+    from main import app
+    from common.db import get_async_session
+
+    user_id = uuid.uuid4()
+    mock_user = User(id=user_id, phone_number="+919876543210")
+
+    monkeypatch.setattr(
+        "auth.router.get_or_create_user",
+        AsyncMock(return_value=mock_user),
+    )
+
+    db = make_mock_db()
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "+919876543210", "otp": "123456"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert isinstance(body["data"]["token"], str)
+    assert len(body["data"]["token"]) > 20
+    assert body["data"]["userId"] == str(user_id)
+
+
+def test_api_auth_verify_otp_invalid_otp_401():
+    """Test POST /auth/verify-otp with incorrect OTP returns HTTP 401 INVALID_OTP."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "+919876543210", "otp": "000000"},
+    )
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_OTP"
+
+
+def test_api_auth_verify_otp_invalid_phone_422():
+    """Test POST /auth/verify-otp with invalid phone number returns HTTP 422 INVALID_PHONE."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "bad_phone_number", "otp": "123456"},
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_PHONE"
+
+
+def test_api_get_evidence_success_200(monkeypatch):
+    """Test GET /evidence/{incident_type} returns HTTP 200 with checklist items."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    monkeypatch.setattr(
+        "evidence.router.get_for_incident_type",
+        AsyncMock(return_value={
+            "incidentType": "wage_nonpayment",
+            "items": ["salary slips", "bank statements", "written communication"],
+        }),
+    )
+
+    client = TestClient(app)
+    response = client.get("/evidence/wage_nonpayment")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert body["data"]["incidentType"] == "wage_nonpayment"
+    assert body["data"]["items"] == ["salary slips", "bank statements", "written communication"]
+
+
+def test_api_get_evidence_unsupported_fallback_200(monkeypatch):
+    """Test GET /evidence/{incident_type} with unknown type returns HTTP 200 fallback row."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    monkeypatch.setattr(
+        "evidence.router.get_for_incident_type",
+        AsyncMock(return_value={
+            "incidentType": "unsupported",
+            "items": ["any written communication", "payment records", "dated photos"],
+        }),
+    )
+
+    client = TestClient(app)
+    response = client.get("/evidence/unknown_type")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert body["data"]["incidentType"] == "unsupported"
+    assert len(body["data"]["items"]) == 3
+
+
+def test_api_get_evidence_unauthorized_401():
+    """Test GET /evidence/{incident_type} without auth returns HTTP 401 UNAUTHORIZED."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    response = client.get("/evidence/wage_nonpayment")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"
+
+
+def test_api_get_legal_aid_success_200(monkeypatch):
+    """Test GET /legal-aid returns HTTP 200 with matching contacts list."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    contact_1 = LegalAidContact(
+        id=uuid.uuid4(),
+        state="Maharashtra",
+        name="Maharashtra State Legal Services Authority (MSLSA)",
+        contact_info="Helpline: 1800-22-2324 / Phone: 022-22691395",
+        display_order=1,
+    )
+    contact_2 = LegalAidContact(
+        id=uuid.uuid4(),
+        state="Maharashtra",
+        name="High Court Legal Services Committee, Mumbai",
+        contact_info="Phone: 8591903603 / Email: hclsc-mum.mh@bhc.gov.in",
+        display_order=2,
+    )
+
+    monkeypatch.setattr(
+        "legalaid.router.get_for_state",
+        AsyncMock(return_value=[contact_1, contact_2]),
+    )
+
+    client = TestClient(app)
+    response = client.get("/legal-aid?state=Maharashtra")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert len(body["data"]["contacts"]) == 2
+    assert body["data"]["contacts"][0]["name"] == "Maharashtra State Legal Services Authority (MSLSA)"
+    assert body["data"]["contacts"][0]["contactInfo"] == "Helpline: 1800-22-2324 / Phone: 022-22691395"
+    assert body["data"]["contacts"][1]["name"] == "High Court Legal Services Committee, Mumbai"
+
+
+def test_api_get_legal_aid_unsupported_state_fallback_200(monkeypatch):
+    """Test GET /legal-aid with unknown state returns HTTP 200 with central fallback contacts."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    contact_central = LegalAidContact(
+        id=uuid.uuid4(),
+        state="central",
+        name="National Legal Services Authority (NALSA)",
+        contact_info="National Toll-Free Helpline: 15100",
+        display_order=1,
+    )
+
+    monkeypatch.setattr(
+        "legalaid.router.get_for_state",
+        AsyncMock(return_value=[contact_central]),
+    )
+
+    client = TestClient(app)
+    response = client.get("/legal-aid?state=Goa")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert len(body["data"]["contacts"]) == 1
+    assert body["data"]["contacts"][0]["name"] == "National Legal Services Authority (NALSA)"
+
+
+def test_api_get_legal_aid_unauthorized_401():
+    """Test GET /legal-aid without authentication returns HTTP 401 UNAUTHORIZED."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    response = client.get("/legal-aid")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"
