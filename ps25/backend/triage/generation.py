@@ -52,6 +52,16 @@ Output schema (all fields required, arrays may be empty per rule 3):
 }"""
 
 
+def _strip_fences(raw: str) -> str:
+    """Remove markdown code fences that models sometimes wrap JSON responses in."""
+    s = raw.strip()
+    if s.startswith("```"):
+        s = s[s.index("\n") + 1:] if "\n" in s else s[3:]
+    if s.endswith("```"):
+        s = s[: s.rfind("```")]
+    return s.strip()
+
+
 async def _request(model: str, prompt: str) -> dict:
     payload = {"model": model, "temperature": 0.2, "max_tokens": 900, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": prompt}]}
     headers = {"Authorization": f"Bearer {settings.openrouter_api_key}"}
@@ -62,7 +72,7 @@ async def _request(model: str, prompt: str) -> dict:
             async with httpx.AsyncClient(timeout=20.0) as client:
                 response = await client.post(f"{settings.openrouter_base_url}/v1/chat/completions", headers=headers, json=payload)
                 response.raise_for_status()
-                return json.loads(response.json()["choices"][0]["message"]["content"])
+                return json.loads(_strip_fences(response.json()["choices"][0]["message"]["content"]))
         except (httpx.HTTPError, KeyError, TypeError, json.JSONDecodeError):
             continue
     raise GenerationError("Grounded generation failed")
