@@ -26,7 +26,7 @@ function Onboarding() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button
               size="lg"
-              onClick={() => navigate("/incident")}
+              onClick={() => navigate("/login")}
             >
               Start Intake Flow
             </Button>
