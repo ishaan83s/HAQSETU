@@ -96,7 +96,7 @@ def answer_query(query, top_k=5):
     prompt = build_prompt(query, chunks)
 
     response = client.chat.completions.create(
-        model="qwen3.6-35b-a3b",  # confirm exact model name from CoE docs
+        model="qwen3.6-35b-a3b",  
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -106,7 +106,6 @@ def answer_query(query, top_k=5):
     return {"answer": answer, "sources": sources}
 
 
-# Test it
 # Test it
 if __name__ == "__main__":
   query = "My company hasn’t given me what they owe me."

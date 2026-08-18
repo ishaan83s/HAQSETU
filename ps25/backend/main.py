@@ -22,7 +22,7 @@ if str(MODEL_ROOT_DIR) not in sys.path:
 
 # Direct import of existing RAG answer_query function.
 # Fails clearly at startup if environment or module dependencies are missing.
-from src.rag import answer_query
+from ps25.model.src.rag import answer_query
 
 app = FastAPI(
     title="Legal RAG API Backend",
