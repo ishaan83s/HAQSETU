@@ -755,6 +755,12 @@ def test_api_post_incident_voice_success(monkeypatch):
     assert body["success"] is True
     assert body["error"] is None
     assert "incidentId" in body["data"]
+    assert isinstance(body["data"]["incidentId"], str)
+    # Valid UUID string format
+    assert uuid.UUID(body["data"]["incidentId"])
+    assert "triage" in body["data"]
+    assert "cards" in body["data"]["triage"]
+    assert "emptyTranscription" not in body["data"]
 
 
 def test_api_post_incident_empty_transcription_200(monkeypatch):
@@ -783,6 +789,7 @@ def test_api_post_incident_empty_transcription_200(monkeypatch):
     body = response.json()
     assert body["success"] is True
     assert body["data"] == {"emptyTranscription": True}
+    assert "incidentId" not in body["data"]
     assert body["error"] is None
 
 
