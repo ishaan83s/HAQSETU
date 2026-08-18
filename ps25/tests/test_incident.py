@@ -1053,3 +1053,100 @@ def test_api_put_user_context_success():
     assert body["error"] is None
     assert db.add.call_count == 1
     assert db.commit.call_count == 1
+
+
+def test_api_put_user_context_existing_partial_update():
+    """Test PUT /users/context updates existing context row preserving unset fields."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    existing_ctx = UserContext(
+        id=uuid.uuid4(),
+        user_id=user.id,
+        state="Maharashtra",
+        role_category="worker",
+        vulnerability_tags=["gig_worker"],
+    )
+
+    db = make_mock_db()
+    db_result = MagicMock()
+    db_result.scalar_one_or_none.return_value = existing_ctx
+    db.execute.return_value = db_result
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    # Update only roleCategory
+    response = client.put(
+        "/users/context",
+        json={
+            "roleCategory": "student",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"saved": True}
+    assert existing_ctx.state == "Maharashtra"
+    assert existing_ctx.role_category == "student"
+    assert existing_ctx.vulnerability_tags == ["gig_worker"]
+    assert db.add.call_count == 0  # Not re-added, updated in place
+    assert db.commit.call_count == 1
+
+
+def test_api_put_user_context_forbidden_extra_field_400():
+    """Test PUT /users/context with unrecognized field returns HTTP 400."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    response = client.put(
+        "/users/context",
+        json={
+            "state": "Maharashtra",
+            "unknownProperty": "malicious_or_typo",
+        },
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["error"]["code"] == "INVALID_INPUT"
+
+
+def test_api_put_user_context_unauthorized_401():
+    """Test PUT /users/context without authentication returns HTTP 401."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+
+    response = client.put(
+        "/users/context",
+        json={
+            "state": "Maharashtra",
+        },
+    )
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["error"]["code"] == "UNAUTHORIZED"
+
