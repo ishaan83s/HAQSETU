@@ -109,7 +109,7 @@ def answer_query(query, top_k=5):
 # Test it
 # Test it
 if __name__ == "__main__":
-  query = "My landlord refuses to return my security depo"
+  query = "My company hasn’t given me what they owe me."
   result = answer_query(query)
 
   # Clean, structured output formatting
