@@ -10,9 +10,14 @@ export interface CreateIncidentRequest {
   audioBase64: string | null
 }
 
-export interface CreateIncidentResponse {
-  incidentId: string
+export interface EmptyTranscriptionPayload {
+  emptyTranscription: true
+  incidentId?: never
 }
+
+export type CreateIncidentResponse =
+  | GetIncidentResponse
+  | EmptyTranscriptionPayload
 
 export function createIncident(
   request: CreateIncidentRequest,

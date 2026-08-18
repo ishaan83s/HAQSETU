@@ -80,6 +80,14 @@ class GenerationDraft(BaseModel):
     what_may_protect_you: list[GeneratedClaim] = Field(alias="whatMayProtectYou")
     what_you_can_do_next: list[GeneratedClaim] = Field(alias="whatYouCanDoNext")
 
+    @field_validator("what_may_be_happening", mode="before")
+    @classmethod
+    def require_text_key(cls, value: object) -> object:
+        """Reject any dict that lacks a non-empty 'text' key so the retry chain fires."""
+        if isinstance(value, dict) and not str(value.get("text", "")).strip():
+            raise ValueError('"whatMayBeHappening" must contain a non-empty "text" key')
+        return value
+
 
 class ClaimWithSource(BaseModel):
     text: str

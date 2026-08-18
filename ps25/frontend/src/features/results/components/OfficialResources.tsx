@@ -52,6 +52,30 @@ export default function OfficialResources({
                   {resource.name}
                 </h3>
               </div>
+              {(resource.section || resource.jurisdictionState || resource.versionLabel || resource.effectiveDate) && (
+                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                  {resource.section && (
+                    <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-foreground">
+                      {resource.section}
+                    </span>
+                  )}
+                  {resource.jurisdictionState && (
+                    <span className="inline-flex items-center rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                      {resource.jurisdictionState}
+                    </span>
+                  )}
+                  {resource.versionLabel && (
+                    <span className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                      {resource.versionLabel}
+                    </span>
+                  )}
+                  {resource.effectiveDate && (
+                    <span className="inline-flex items-center rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                      Eff. {resource.effectiveDate}
+                    </span>
+                  )}
+                </div>
+              )}
               <p className="text-xs leading-relaxed text-muted-foreground">
                 {resource.description}
               </p>

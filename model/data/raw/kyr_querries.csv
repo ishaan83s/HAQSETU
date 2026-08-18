@@ -1,0 +1,785 @@
+query,domain,intent
+"My company has not given me my salary for the last three months and now HR is ignoring my calls.",LABOUR,UNPAID_WAGES
+"Boss didn't pay my salary on time. It has been 45 days and no response.",LABOUR,UNPAID_WAGES
+"Mujhe mera pichle 2 mahine ka salary nahi mila hai, kya karu?",LABOUR,UNPAID_WAGES
+"My employer is withholding my final settlement and pending wages without any valid reason.",LABOUR,UNPAID_WAGES
+"I worked overtime for weeks but my overtime pay and basic salary have not been credited.",LABOUR,UNPAID_WAGES
+"Salary pending since March.",LABOUR,UNPAID_WAGES
+"Company wala salary nahi de raha hai bolta hai baad me milega.",LABOUR,UNPAID_WAGES
+"Where can I complain about unpaid salary in India?",LABOUR,UNPAID_WAGES
+"My boss cut my salary arbitrarily and hasn't cleared my dues.",LABOUR,UNPAID_WAGES
+"Pending wages complaint process.",LABOUR,UNPAID_WAGES
+"Payment ruki hui hai 3 mahine se employer phone nahi utha raha.",LABOUR,UNPAID_WAGES
+"Can an employer hold my salary for leaving the company abruptly?",LABOUR,UNPAID_WAGES
+"My internship stipend has not been paid for months.",LABOUR,UNPAID_WAGES
+"No salary credited for current month.",LABOUR,UNPAID_WAGES
+"Sir mujhe teen mahine se paise nahi mile, financial problem ho rahi hai.",LABOUR,UNPAID_WAGES
+"My dues are stuck with my employer.",LABOUR,UNPAID_WAGES
+"Employer refused to pay my wages after I resigned.",LABOUR,UNPAID_WAGES
+"Salary nahi aayi is mahine ki.",LABOUR,UNPAID_WAGES
+"Delayed salary and unpaid bonus issues.",LABOUR,UNPAID_WAGES
+"Company withheld my salary illegally.",LABOUR,UNPAID_WAGES
+"Mera salary nahi mila complaint kaise kare?",LABOUR,UNPAID_WAGES
+"Unpaid wages dispute with boss.",LABOUR,UNPAID_WAGES
+"Factory owner is not giving weekly wages.",LABOUR,UNPAID_WAGES
+"My salary was deducted fully and not paid.",LABOUR,UNPAID_WAGES
+"Paisa nahi mila company se.",LABOUR,UNPAID_WAGES
+"Pending salary recovery steps.",LABOUR,UNPAID_WAGES
+"Employer didn't pay salary before firing me.",LABOUR,UNPAID_WAGES
+"Salary withheld without notice.",LABOUR,UNPAID_WAGES
+"Contractor didn't pay my daily wages.",LABOUR,UNPAID_WAGES
+"My salary has been pending since Diwali.",LABOUR,UNPAID_WAGES
+"Can I file a complaint for non-payment of wages?",LABOUR,UNPAID_WAGES
+"Paisa nahi de raha manager.",LABOUR,UNPAID_WAGES
+"Company is bankrupt and hasn't paid salaries.",LABOUR,UNPAID_WAGES
+"Unpaid salary grievance.",LABOUR,UNPAID_WAGES
+"Mera salary hold kar liya hai.",LABOUR,UNPAID_WAGES
+"Salary payment delayed continuously.",LABOUR,UNPAID_WAGES
+"Boss stopped my salary for taking leave.",LABOUR,UNPAID_WAGES
+"Pending salary issue with startup.",LABOUR,UNPAID_WAGES
+"Can a company refuse to pay salary for notice period served?",LABOUR,UNPAID_WAGES
+"Salary nahi mil rahi kya kare?",LABOUR,UNPAID_WAGES
+"My employer fired me suddenly today without any prior notice or valid reason.",LABOUR,WRONGFUL_TERMINATION
+"Can my company terminate me overnight without notice?",LABOUR,WRONGFUL_TERMINATION
+"Mujhe bina kisi notice ke job se nikal diya gaya.",LABOUR,WRONGFUL_TERMINATION
+"I was wrongfully terminated from my position after raising a safety concern.",LABOUR,WRONGFUL_TERMINATION
+"Company fired me suddenly saying performance is bad without giving warning.",LABOUR,WRONGFUL_TERMINATION
+"Sudden job termination without notice.",LABOUR,WRONGFUL_TERMINATION
+"Achanak office se nikal diya bina reason ke.",LABOUR,WRONGFUL_TERMINATION
+"What are my rights against unfair firing?",LABOUR,WRONGFUL_TERMINATION
+"My manager fired me verbally over a phone call without any official letter.",LABOUR,WRONGFUL_TERMINATION
+"Illegal termination of employment.",LABOUR,WRONGFUL_TERMINATION
+"Bina notice ke job se nikal diya mujhko.",LABOUR,WRONGFUL_TERMINATION
+"Can an employer fire a pregnant employee abruptly?",LABOUR,WRONGFUL_TERMINATION
+"I was laid off without following proper retrenchment procedures.",LABOUR,WRONGFUL_TERMINATION
+"Terminated without cause.",LABOUR,WRONGFUL_TERMINATION
+"Mujhe kal hi job se hata diya bina bataye.",LABOUR,WRONGFUL_TERMINATION
+"Wrongful dismissal from company.",LABOUR,WRONGFUL_TERMINATION
+"Employer terminated my contract mid-term without breach.",LABOUR,WRONGFUL_TERMINATION
+"Job chali gayi achanak.",LABOUR,WRONGFUL_TERMINATION
+"Fired without notice period.",LABOUR,WRONGFUL_TERMINATION
+"Retrenched without notice or compensation.",LABOUR,WRONGFUL_TERMINATION
+"Company ne bina notice ke nikal diya.",LABOUR,WRONGFUL_TERMINATION
+"Unlawful job termination complaint.",LABOUR,WRONGFUL_TERMINATION
+"My boss terminated me because of personal bias.",LABOUR,WRONGFUL_TERMINATION
+"Fired unfairly from job.",LABOUR,WRONGFUL_TERMINATION
+"Nikal diya company ne bina reason.",LABOUR,WRONGFUL_TERMINATION
+"Unfair termination legal query.",LABOUR,WRONGFUL_TERMINATION
+"Company fired me while I was on sick leave.",LABOUR,WRONGFUL_TERMINATION
+"Job loss due to unfair termination.",LABOUR,WRONGFUL_TERMINATION
+"Employer terminated me without warning.",LABOUR,WRONGFUL_TERMINATION
+"Fired suddenly after 5 years of service.",LABOUR,WRONGFUL_TERMINATION
+"Can they fire me without a formal inquiry?",LABOUR,WRONGFUL_TERMINATION
+"Bina warning ke job se nikal diya.",LABOUR,WRONGFUL_TERMINATION
+"My manager fired me unjustly.",LABOUR,WRONGFUL_TERMINATION
+"Wrongful termination dispute.",LABOUR,WRONGFUL_TERMINATION
+"Job se nikal diya bina reason.",LABOUR,WRONGFUL_TERMINATION
+"Terminated without reason.",LABOUR,WRONGFUL_TERMINATION
+"Boss fired me because I refused to work extra hours.",LABOUR,WRONGFUL_TERMINATION
+"Sudden termination issue.",LABOUR,WRONGFUL_TERMINATION
+"Can a company terminate an employee without notice?",LABOUR,WRONGFUL_TERMINATION
+"Bina notice ke job se nikalne par kya kare?",LABOUR,WRONGFUL_TERMINATION
+"My manager passes inappropriate sexual comments and makes me feel unsafe at work.",LABOUR,WORKPLACE_HARASSMENT
+"Facing severe mental harassment and bullying by my team lead.",LABOUR,WORKPLACE_HARASSMENT
+"Office me mere sath harassment ho raha hai senior dwara.",LABOUR,WORKPLACE_HARASSMENT
+"I am being targeted and harassed at the workplace by my supervisor.",LABOUR,WORKPLACE_HARASSMENT
+"My boss is mentally harassing me and creating a hostile work environment.",LABOUR,WORKPLACE_HARASSMENT
+"Workplace harassment complaint procedure.",LABOUR,WORKPLACE_HARASSMENT
+"Office me harassment ho raha hai boss pareshan kar raha hai.",LABOUR,WORKPLACE_HARASSMENT
+"What can I do against workplace bullying?",LABOUR,WORKPLACE_HARASSMENT
+"Colleagues are spreading false rumors and harassing me daily.",LABOUR,WORKPLACE_HARASSMENT
+"Sexual harassment at office by coworker.",LABOUR,WORKPLACE_HARASSMENT
+"Office me mujhse galat tarike se baat karte hain.",LABOUR,WORKPLACE_HARASSMENT
+"Can I file a police complaint for workplace harassment?",LABOUR,WORKPLACE_HARASSMENT
+"My supervisor is discriminating and harassing me based on my gender.",LABOUR,WORKPLACE_HARASSMENT
+"Mental harassment at job.",LABOUR,WORKPLACE_HARASSMENT
+"Mujhe office me torture kiya ja raha hai.",LABOUR,WORKPLACE_HARASSMENT
+"Workplace bullying grievance.",LABOUR,WORKPLACE_HARASSMENT
+"Employer is creating a hostile work atmosphere to force me to quit.",LABOUR,WORKPLACE_HARASSMENT
+"Office harassment issue.",LABOUR,WORKPLACE_HARASSMENT
+"Harassment by manager at workplace.",LABOUR,WORKPLACE_HARASSMENT
+"Verbal abuse by boss in office.",LABOUR,WORKPLACE_HARASSMENT
+"Office mein pareshan kiya ja raha hai.",LABOUR,WORKPLACE_HARASSMENT
+"Workplace discrimination and harassment.",LABOUR,WORKPLACE_HARASSMENT
+"Manager is continuously shouting and insulting me in front of everyone.",LABOUR,WORKPLACE_HARASSMENT
+"Bullying at work.",LABOUR,WORKPLACE_HARASSMENT
+"Boss mentally harass kar raha hai.",LABOUR,WORKPLACE_HARASSMENT
+"Reporting workplace harassment in India.",LABOUR,WORKPLACE_HARASSMENT
+"My team lead is threatening me with termination and harassing me.",LABOUR,WORKPLACE_HARASSMENT
+"Hostile work environment complaint.",LABOUR,WORKPLACE_HARASSMENT
+"Harassment by supervisor.",LABOUR,WORKPLACE_HARASSMENT
+"Inappropriate behavior by senior staff.",LABOUR,WORKPLACE_HARASSMENT
+"How to report workplace harassment legally?",LABOUR,WORKPLACE_HARASSMENT
+"Office me bahut pareshan kar rahe hain.",LABOUR,WORKPLACE_HARASSMENT
+"My boss is abusing me verbally every day.",LABOUR,WORKPLACE_HARASSMENT
+"Workplace harassment and abuse.",LABOUR,WORKPLACE_HARASSMENT
+"Boss gaali deta hai office me.",LABOUR,WORKPLACE_HARASSMENT
+"Office harassment help.",LABOUR,WORKPLACE_HARASSMENT
+"I am facing constant harassment from management after complaining.",LABOUR,WORKPLACE_HARASSMENT
+"Workplace bullying and harassment.",LABOUR,WORKPLACE_HARASSMENT
+"Can an employer harass an employee like this?",LABOUR,WORKPLACE_HARASSMENT
+"Office me mental harassment ho raha hai.",LABOUR,WORKPLACE_HARASSMENT
+"My company forces me to work 14 hours a day without any extra overtime pay.",LABOUR,WORKING_HOURS
+"Am I legally required to work on weekends without compensation?",LABOUR,WORKING_HOURS
+"Mujhse 12-14 ghante kaam karwate hain roz.",LABOUR,WORKING_HOURS
+"My employer does not allow any breaks during my shift and demands continuous work.",LABOUR,WORKING_HOURS
+"Company is violating standard working hours limits and labor laws.",LABOUR,WORKING_HOURS
+"Excessive working hours complaint.",LABOUR,WORKING_HOURS
+"Roz 12 ghante kaam karwate hain extra paisa nahi dete.",LABOUR,WORKING_HOURS
+"What is the legal limit for working hours in India?",LABOUR,WORKING_HOURS
+"My boss forces me to stay back late every night without overtime.",LABOUR,WORKING_HOURS
+"Overtime and working hours dispute.",LABOUR,WORKING_HOURS
+"Office me bahut late tak rokte hain bina overtime.",LABOUR,WORKING_HOURS
+"Can an employer force employees to work on national holidays?",LABOUR,WORKING_HOURS
+"I am made to work 70 hours a week without rest days.",LABOUR,WORKING_HOURS
+"Forced overtime issue.",LABOUR,WORKING_HOURS
+"Mujhe Sunday ko bhi kaam par bulate hain.",LABOUR,WORKING_HOURS
+"Working hours violation.",LABOUR,WORKING_HOURS
+"Company does not provide weekly off days as per rules.",LABOUR,WORKING_HOURS
+"Shift timings violation.",LABOUR,WORKING_HOURS
+"Excessive work hours without break.",LABOUR,WORKING_HOURS
+"Mandatory overtime without pay.",LABOUR,WORKING_HOURS
+"Bina overtime ke der tak rokte hain.",LABOUR,WORKING_HOURS
+"Labor law working hours query.",LABOUR,WORKING_HOURS
+"My employer demands 16 hours of work daily.",LABOUR,WORKING_HOURS
+"Unrealistic working hours.",LABOUR,WORKING_HOURS
+"Extra kaam karwate hain paisa nahi dete.",LABOUR,WORKING_HOURS
+"Working hours grievance.",LABOUR,WORKING_HOURS
+"Night shift timings are being forced against my contract.",LABOUR,WORKING_HOURS
+"Long working hours dispute.",LABOUR,WORKING_HOURS
+"Overtime payment for extra hours.",LABOUR,WORKING_HOURS
+"Working hours limit in private companies.",LABOUR,WORKING_HOURS
+"Can my boss force me to work overtime?",LABOUR,WORKING_HOURS
+"Extra ghante kaam karwate hain.",LABOUR,WORKING_HOURS
+"My company makes us work without lunch breaks.",LABOUR,WORKING_HOURS
+"Working hours labor complaint.",LABOUR,WORKING_HOURS
+"Roz overtime karwate hain.",LABOUR,WORKING_HOURS
+"Working hours rules in India.",LABOUR,WORKING_HOURS
+"My boss makes me work on all public holidays without holiday pay.",LABOUR,WORKING_HOURS
+"Shift hours violation.",LABOUR,WORKING_HOURS
+"Can an office force you to work 12 hours?",LABOUR,WORKING_HOURS
+"Working hours ka kya rule hai?",LABOUR,WORKING_HOURS
+"I ordered a smartphone online but the company is refusing to give me a refund for a returned item.",CONSUMER,REFUND
+"My flight was cancelled by the airline and they are not processing my ticket refund.",CONSUMER,REFUND
+"Maine saman return kiya tha par abhi tak refund nahi mila.",CONSUMER,REFUND
+"The merchant cancelled my order and has not refunded my money after 15 days.",CONSUMER,REFUND
+"E-commerce website is delaying my refund despite successful product return.",CONSUMER,REFUND
+"Refund not received after order cancellation.",CONSUMER,REFUND
+"Paisa kaat liya par refund nahi de rahe.",CONSUMER,REFUND
+"How can I claim a refund for a cancelled service?",CONSUMER,REFUND
+"The app charged me twice for a single booking and refuses to refund.",CONSUMER,REFUND
+"Merchant refund dispute.",CONSUMER,REFUND
+"Refund ke liye 2 hafte se bol raha hu koi sunta nahi.",CONSUMER,REFUND
+"Can a company charge a cancellation fee and deny refund?",CONSUMER,REFUND
+"I cancelled my hotel booking in advance but they are keeping my advance payment.",CONSUMER,REFUND
+"Delayed refund complaint.",CONSUMER,REFUND
+"Online shopping ka refund nahi mil raha.",CONSUMER,REFUND
+"Refund grievance portal.",CONSUMER,REFUND
+"The gym cancelled my membership but won't refund the remaining balance.",CONSUMER,REFUND
+"Money refund issue.",CONSUMER,REFUND
+"Refund nahi de raha dukan wala.",CONSUMER,REFUND
+"Unreturned security deposit from service provider.",CONSUMER,REFUND
+"Paisa wapas nahi kar raha hai.",CONSUMER,REFUND
+"Refund not processed by merchant.",CONSUMER,REFUND
+"I returned a defective dress but store credit was given instead of cash refund.",CONSUMER,REFUND
+"Failed transaction refund query.",CONSUMER,REFUND
+"Refund nahi mila company se.",CONSUMER,REFUND
+"Consumer court case for refund.",CONSUMER,REFUND
+"The travel agency refused to refund my booking amount after cancellation.",CONSUMER,REFUND
+"Service refund dispute.",CONSUMER,REFUND
+"Refund pending since last month.",CONSUMER,REFUND
+"Refund delay complaint online.",CONSUMER,REFUND
+"What is the remedy if a company refuses refund?",CONSUMER,REFUND
+"Paisa phas gaya refund nahi ho raha.",CONSUMER,REFUND
+"The coaching institute cancelled classes and denied refund.",CONSUMER,REFUND
+"Product return refund problem.",CONSUMER,REFUND
+"Refund nahi aaya abhi tak.",CONSUMER,REFUND
+"Consumer complaint for refund delay.",CONSUMER,REFUND
+"I paid for a service that was never delivered and now they won't refund.",CONSUMER,REFUND
+"Payment refund issue.",CONSUMER,REFUND
+"Can a merchant have a strict no-refund policy on defective goods?",CONSUMER,REFUND
+"Refund ke liye kya kare?",CONSUMER,REFUND
+"I bought a brand new laptop yesterday and it stopped working completely today.",CONSUMER,DEFECTIVE_PRODUCT
+"The refrigerator I purchased has a faulty compressor right from day one.",CONSUMER,DEFECTIVE_PRODUCT
+"Naya phone kharida tha aur wo kharab nikla delivery ke din hi.",CONSUMER,DEFECTIVE_PRODUCT
+"The car I bought has a major engine defect and the dealer is not replacing it.",CONSUMER,DEFECTIVE_PRODUCT
+"Received a broken and defective television set from the online store.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective product delivered complaint.",CONSUMER,DEFECTIVE_PRODUCT
+"Kharab saman bhej diya dukan wale ne.",CONSUMER,DEFECTIVE_PRODUCT
+"How to report a defective product bought online?",CONSUMER,DEFECTIVE_PRODUCT
+"The washing machine is leaking and malfunctioning immediately after installation.",CONSUMER,DEFECTIVE_PRODUCT
+"Faulty product replacement dispute.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective item mila hai exchange nahi kar rahe.",CONSUMER,DEFECTIVE_PRODUCT
+"Can a seller refuse to replace a defective electronic item?",CONSUMER,DEFECTIVE_PRODUCT
+"I purchased an AC that fails to cool and has a manufacturing defect.",CONSUMER,DEFECTIVE_PRODUCT
+"Damaged product delivery issue.",CONSUMER,DEFECTIVE_PRODUCT
+"Kharaab product de diya online order me.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective goods consumer complaint.",CONSUMER,DEFECTIVE_PRODUCT
+"The furniture delivered to my house had broken legs and structural defects.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective product issue.",CONSUMER,DEFECTIVE_PRODUCT
+"Saman kharab nikla badal nahi rahe.",CONSUMER,DEFECTIVE_PRODUCT
+"Substandard and defective product sold.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective piece de diya dukan se.",CONSUMER,DEFECTIVE_PRODUCT
+"Manufacturing defect complaint.",CONSUMER,DEFECTIVE_PRODUCT
+"My new smartphone has a dead screen and the service center won't replace it.",CONSUMER,DEFECTIVE_PRODUCT
+"Faulty goods grievance.",CONSUMER,DEFECTIVE_PRODUCT
+"Kharab item bhej diya.",CONSUMER,DEFECTIVE_PRODUCT
+"Consumer forum case for defective product.",CONSUMER,DEFECTIVE_PRODUCT
+"The microwave oven stopped working within a week of purchase.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective appliance dispute.",CONSUMER,DEFECTIVE_PRODUCT
+"Broken product received.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective product compensation claim.",CONSUMER,DEFECTIVE_PRODUCT
+"What are my rights if I receive a defective item?",CONSUMER,DEFECTIVE_PRODUCT
+"Kharab saman wapas nahi le rahe.",CONSUMER,DEFECTIVE_PRODUCT
+"The laptop screen flickers and has hardware defects out of the box.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective purchase complaint.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective piece mil gaya.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective product legal action.",CONSUMER,DEFECTIVE_PRODUCT
+"I bought a mixer grinder that burned out on its first use.",CONSUMER,DEFECTIVE_PRODUCT
+"Defective merchandise issue.",CONSUMER,DEFECTIVE_PRODUCT
+"Can I sue a company for selling a defective product?",CONSUMER,DEFECTIVE_PRODUCT
+"Kharab product ke liye kya kare?",CONSUMER,DEFECTIVE_PRODUCT
+"The company is refusing to repair my smartphone even though it is well within the warranty period.",CONSUMER,WARRANTY
+"My laptop under active warranty broke and the service center is demanding heavy repair charges.",CONSUMER,WARRANTY
+"Warranty me hai product fir bhi free repair nahi kar rahe.",CONSUMER,WARRANTY
+"The authorized service center claims my warranty is void due to a fake reason.",CONSUMER,WARRANTY
+"My TV under warranty has a panel issue and they keep delaying the repair.",CONSUMER,WARRANTY
+"Warranty claim rejection dispute.",CONSUMER,WARRANTY
+"Warranty period me kharab hua par free service nahi de rahe.",CONSUMER,WARRANTY
+"What are my rights regarding product warranty in India?",CONSUMER,WARRANTY
+"The washing machine motor failed during warranty but the company refuses to honor it.",CONSUMER,WARRANTY
+"Warranty service denial complaint.",CONSUMER,WARRANTY
+"Warranty me saman tha fir bhi paise mang rahe hain.",CONSUMER,WARRANTY
+"Can a company void warranty for minor external scratches?",CONSUMER,WARRANTY
+"My refrigerator compressor failed under warranty and technician is not visiting.",CONSUMER,WARRANTY
+"Product warranty dispute.",CONSUMER,WARRANTY
+"Warranty claim mana kar diya company ne.",CONSUMER,WARRANTY
+Warranty grievance online,CONSUMER,WARRANTY
+"The smartphone battery swelled up during warranty and they refused replacement.",CONSUMER,WARRANTY
+"Warranty repair issue.",CONSUMER,WARRANTY
+"Warranty me hai phir bhi theek nahi kar rahe.",CONSUMER,WARRANTY
+"Extended warranty service fraud.",CONSUMER,WARRANTY
+"Warranty claim reject kar diya bina baat ke.",CONSUMER,WARRANTY
+"Consumer complaint for warranty breach.",CONSUMER,WARRANTY
+"My AC under warranty is not being repaired despite multiple service requests.",CONSUMER,WARRANTY
+"Warranty dispute resolution.",CONSUMER,WARRANTY
+"Warranty claim reject ho gaya.",CONSUMER,WARRANTY
+"Warranty violation complaint.",CONSUMER,WARRANTY
+"The laptop motherboard failed within warranty but they say it is water damage falsely.",CONSUMER,WARRANTY
+"Warranty service delay.",CONSUMER,WARRANTY
+"Warranty me mana kar rahe hain.",CONSUMER,WARRANTY
+"Warranty support issue.",CONSUMER,WARRANTY
+"How to file a complaint for warranty denial?",CONSUMER,WARRANTY
+"Warranty me bhi paisa mang rahe hain.",CONSUMER,WARRANTY
+"The microwave parts under warranty are not available with the service center for months.",CONSUMER,WARRANTY
+"Warranty claim issue.",CONSUMER,WARRANTY
+"Warranty card hone ke baad bhi mana kar rahe.",CONSUMER,WARRANTY
+"Warranty claim legal help.",CONSUMER,WARRANTY
+"My inverter broke during warranty period and the dealer is ignoring my calls.",CONSUMER,WARRANTY
+"Warranty dispute with manufacturer.",CONSUMER,WARRANTY
+"Can a brand reject warranty without inspection?",CONSUMER,WARRANTY
+"Warranty claim ke liye kya kare?",CONSUMER,WARRANTY
+"The online store is charging hidden fees at checkout that were not displayed initially.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"A local shop is selling expired products by changing the manufacturing date labels.",CONSUMER,UNFAIR_TRADE
+"Dukan wala expiry date badal kar saman bech raha hai.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The airline practiced deceptive pricing by adding unrequested insurance fees automatically.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Misleading advertisements made false claims about the product effectiveness.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade practice complaint.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"False advertising aur cheating kar raha hai dukan wala.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"How to report misleading advertisements and unfair trade practices?",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The car dealer forced me to buy mandatory accessories along with the vehicle.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Deceptive marketing grievance.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Company fake promise karke saman bech rahi hai.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Can a store force tie-in purchases illegally?",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The builder made false promises about amenities in the brochure.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair business practice issue.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Galat ad dikha kar loot rahe hain.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Consumer protection unfair trade.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The hospital overcharged me by adding unauthorized tests to my bill.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade dispute.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Chhupa ke extra paisa le liya bill me.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Bait and switch advertising scam by retailer.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Fake claims karke product bech rahe hain.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade practice case.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The supermarket charged more than MRP printed on the product packaging.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"MRP se zyada paisa le rahe hain.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"MRP se upar charge kar raha hai dukan wala.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Complaint against overcharging above MRP.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The restaurant added a mandatory service charge without my consent.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Forced service charge issue.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Restaurant wala zabardasti service charge le raha hai.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade complaint portal.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"What is considered an unfair trade practice under consumer law?",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Hidden charges laga diye bill me.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The ticket booking site added hidden convenience fees at final payment.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Deceptive pricing complaint.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Extra charge le rahe hain bina bataye.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade practice legal action.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"The coaching center made false promises about 100 percent placement.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Misleading claim issue.",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Can a company engage in deceptive trade practices?",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Unfair trade ke khilaf kahan complain kare?",CONSUMER,CONSUMER,UNFAIR_TRADE
+"Someone tricked me into sharing my OTP and stole fifty thousand rupees from my bank account.",CYBER,ONLINE_FRAUD
+"I received a fake payment link and money was debited from my account without authorization.",CYBER,ONLINE_FRAUD
+"Online fraud ho gaya mere sath kisi ne account se paise nikal liye.",CYBER,ONLINE_FRAUD
+"A scammer pretended to be a bank official and stole my net banking credentials.",CYBER,ONLINE_FRAUD
+"I fell victim to a fake investment app scam and lost all my savings.",CYBER,ONLINE_FRAUD
+"Online financial fraud complaint.",CYBER,ONLINE_FRAUD
+"Cyber fraud me paise chale gaye kya karu?",CYBER,ONLINE_FRAUD
+"How to report an online financial scam in India?",CYBER,ONLINE_FRAUD
+"Someone cheated me through a fake UPI transaction request.",CYBER,ONLINE_FRAUD
+"UPI fraud and money theft.",CYBER,ONLINE_FRAUD
+"UPI se kisi ne fraud karke paise nikal liye.",CYBER,ONLINE_FRAUD
+"Can I recover money lost in an online banking scam?",CYBER,ONLINE_FRAUD
+"I paid money for an online product but the seller vanished without delivery.",CYBER,ONLINE_FRAUD
+"Online shopping scam report.",CYBER,ONLINE_FRAUD
+"Online fraud me paisa doob gaya.",CYBER,ONLINE_FRAUD
+"Cyber crime financial fraud.",CYBER,ONLINE_FRAUD
+"A fraudster scammed me on a classifieds website pretending to buy my old item.",CYBER,ONLINE_FRAUD
+"Online scam issue.",CYBER,ONLINE_FRAUD
+"Fraud karke bank account khali kar diya.",CYBER,ONLINE_FRAUD
+"Phishing scam money theft complaint.",CYBER,ONLINE_FRAUD
+"Online fraud ki complaint kahan darj kare?",CYBER,ONLINE_FRAUD
+"Cyber fraud help.",CYBER,ONLINE_FRAUD
+"Someone used a fake loan app to extort money after hacking my contacts.",CYBER,ONLINE_FRAUD
+"Loan app scam and fraud.",CYBER,ONLINE_FRAUD
+"Fake loan app wale blackmail kar rahe hain.",CYBER,ONLINE_FRAUD
+"National cyber crime portal reporting guide.",CYBER,ONLINE_FRAUD
+"I received a fraudulent lottery winning message and lost money for processing fees.",CYBER,ONLINE_FRAUD
+"Lottery scam fraud report.",CYBER,ONLINE_FRAUD
+"Lottery scam me paise chale gaye.",CYBER,ONLINE_FRAUD
+"Online scam complaint procedure.",CYBER,ONLINE_FRAUD
+"What steps to take immediately after an online banking fraud?",CYBER,ONLINE_FRAUD
+"Online fraud se paise kaise wapas milenge?",CYBER,ONLINE_FRAUD
+"A fake customer care number on Google caused me to lose money via remote access app.",CYBER,ONLINE_FRAUD
+"Customer care scam fraud.",CYBER,ONLINE_FRAUD
+"Fake customer care se fraud ho gaya.",CYBER,ONLINE_FRAUD
+"Online fraud reporting steps.",CYBER,ONLINE_FRAUD
+"Someone made unauthorized transactions on my credit card through a cloned website.",CYBER,ONLINE_FRAUD
+"Credit card online fraud.",CYBER,ONLINE_FRAUD
+"Can police catch online fraudsters?",CYBER,ONLINE_FRAUD
+"Online fraud ka FIR kaise kare?",CYBER,ONLINE_FRAUD
+"Someone hacked my Instagram account and is posting inappropriate messages to my friends.",CYBER,ACCOUNT_HACKING
+"My email account was compromised and password changed by an unknown hacker.",CYBER,ACCOUNT_HACKING
+"Mera Facebook account hack ho gaya hai koi aur chala raha hai.",CYBER,ACCOUNT_HACKING
+"An unauthorized person gained access to my bank netbanking account and changed details.",CYBER,ACCOUNT_HACKING
+"Someone hacked my WhatsApp account and is asking money from my contacts.",CYBER,ACCOUNT_HACKING
+"Account hacking complaint.",CYBER,ACCOUNT_HACKING
+"Account hack kar liya kisi ne.",CYBER,ACCOUNT_HACKING
+"How to recover a hacked social media account?",CYBER,ACCOUNT_HACKING
+"My corporate email login was breached by hackers.",CYBER,ACCOUNT_HACKING
+"Cyber attack account compromise.",CYBER,ACCOUNT_HACKING
+"Gmail account hack ho gaya password change nahi ho raha.",CYBER,ACCOUNT_HACKING
+"Can I file a cyber complaint for account hacking?",CYBER,ACCOUNT_HACKING
+"Someone breached my Twitter account and posted spam links.",CYBER,ACCOUNT_HACKING
+"Social media account hacking report.",CYBER,ACCOUNT_HACKING
+"WhatsApp hack karke paise mang raha hai.",CYBER,ACCOUNT_HACKING
+"Cyber crime hacking grievance.",CYBER,ACCOUNT_HACKING
+"My gaming account was stolen and all my in-game items were transferred.",CYBER,ACCOUNT_HACKING
+"Gaming account hack issue.",CYBER,ACCOUNT_HACKING
+"Account hack ho gaya hai.",CYBER,ACCOUNT_HACKING
+"Unauthorized access to online account.",CYBER,ACCOUNT_HACKING
+"Instagram account hack ho gaya recover kaise kare?",CYBER,ACCOUNT_HACKING
+"Account hacking FIR process.",CYBER,ACCOUNT_HACKING
+"Someone hacked my LinkedIn account and started spamming connections.",CYBER,ACCOUNT_HACKING
+"LinkedIn account breach.",CYBER,ACCOUNT_HACKING
+"Account hack ho gaya hai kya kare?",CYBER,ACCOUNT_HACKING
+"Cyber security account hacking help.",CYBER,ACCOUNT_HACKING
+"My cloud storage account was hacked and private photos were accessed.",CYBER,ACCOUNT_HACKING
+"Cloud account hack report.",CYBER,ACCOUNT_HACKING
+"Cloud storage hack ho gaya.",CYBER,ACCOUNT_HACKING
+"Hacking complaint procedure.",CYBER,ACCOUNT_HACKING
+"What are the legal steps for online account hacking in India?",CYBER,ACCOUNT_HACKING
+"Account hack hone par kahan report kare?",CYBER,ACCOUNT_HACKING
+"Someone hacked my YouTube channel and changed the channel name and content.",CYBER,ACCOUNT_HACKING
+"YouTube channel hacking complaint.",CYBER,ACCOUNT_HACKING
+"YouTube channel hack ho gaya.",CYBER,ACCOUNT_HACKING
+"Account hacking legal action.",CYBER,ACCOUNT_HACKING
+"My crypto exchange account was hacked and digital assets were stolen.",CYBER,ACCOUNT_HACKING
+"Crypto account hack issue.",CYBER,ACCOUNT_HACKING
+"Can cyber cell recover a hacked account?",CYBER,ACCOUNT_HACKING
+"Account hack ka complaint kaise kare?",CYBER,ACCOUNT_HACKING
+"Someone stole my PAN card details and Aadhaar number to take a fraudulent loan in my name.",CYBER,IDENTITY_THEFT
+"An unknown person is using my identity documents to create fake social media profiles.",CYBER,IDENTITY_THEFT
+"Kisi ne mera Aadhaar card aur PAN card chura kar fake loan le liya.",CYBER,IDENTITY_THEFT
+"My stolen identity was used to open fraudulent bank accounts for money laundering.",CYBER,IDENTITY_THEFT
+"Someone impersonated me online using my forged ID proof.",CYBER,IDENTITY_THEFT
+"Identity theft and document misuse complaint.",CYBER,IDENTITY_THEFT
+"Mera ID proof use karke fraud kiya kisi ne.",CYBER,IDENTITY_THEFT
+"How to report identity theft in India?",CYBER,IDENTITY_THEFT
+"An impostor created a fake profile using my photos and personal information.",CYBER,IDENTITY_THEFT
+"Impersonation and identity theft report.",CYBER,IDENTITY_THEFT
+"Kisi ne mere naam se fake id bana liya.",CYBER,IDENTITY_THEFT
+"Can I take legal action against someone stealing my identity?",CYBER,IDENTITY_THEFT
+"My passport details were stolen and misused for illegal travel bookings.",CYBER,IDENTITY_THEFT
+"Passport identity theft issue.",CYBER,IDENTITY_THEFT
+"Aadhaar details leak aur misuse.",CYBER,IDENTITY_THEFT
+"Cyber crime identity theft grievance.",CYBER,IDENTITY_THEFT
+"Someone used my stolen driving license to register a fraudulent SIM card.",CYBER,IDENTITY_THEFT
+"SIM card fraud using stolen ID.",CYBER,IDENTITY_THEFT
+"Fake SIM card nikal liya mere ID par.",CYBER,IDENTITY_THEFT
+"Identity theft case.",CYBER,IDENTITY_THEFT
+"PAN card details chori ho gaye aur loan nikal liya.",CYBER,IDENTITY_THEFT
+"Identity theft legal process.",CYBER,IDENTITY_THEFT
+"An imposter applied for a credit card using my leaked personal data.",CYBER,IDENTITY_THEFT
+"Credit card identity theft.",CYBER,IDENTITY_THEFT
+"Mera identity chori ho gaya hai.",CYBER,IDENTITY_THEFT
+"Cyber cell identity theft help.",CYBER,IDENTITY_THEFT
+"Someone is operating a business using my stolen PAN and GST details.",CYBER,IDENTITY_THEFT
+"Business identity theft report.",CYBER,IDENTITY_THEFT
+"GST misuse identity theft.",CYBER,IDENTITY_THEFT
+"Identity theft complaint portal.",CYBER,IDENTITY_THEFT
+"What are my legal protections against identity theft?",CYBER,IDENTITY_THEFT
+"Identity theft hone par kya karna chahiye?",CYBER,IDENTITY_THEFT
+"Someone stole my biometric data and used it for unauthorized verification.",CYBER,IDENTITY_THEFT
+"Biometric identity theft complaint.",CYBER,IDENTITY_THEFT
+"Biometric data misuse issue.",CYBER,IDENTITY_THEFT
+"Identity theft action steps.",CYBER,IDENTITY_THEFT
+"My digital signature certificate was stolen and misused by someone else.",CYBER,IDENTITY_THEFT
+"DSC identity theft dispute.",CYBER,IDENTITY_THEFT
+"Can identity theft lead to criminal liability for the victim?",CYBER,IDENTITY_THEFT
+"Identity theft ka FIR kaise kare?",CYBER,IDENTITY_THEFT
+"A group of people online are continuously trolling, threatening, and harassing me on social media.",CYBER,CYBERBULLYING
+"Someone is posting abusive comments and morphed images of me on public forums.",CYBER,CYBERBULLYING
+"Social media par mujhe troll kiya ja raha hai aur gaali de rahe hain.",CYBER,CYBERBULLYING
+"I am being cyberbullied and harassed by anonymous accounts on Instagram daily.",CYBER,CYBERBULLYING
+"Someone created a hateful meme page targeting me and my college friends.",CYBER,CYBERBULLYING
+"Cyberbullying and online harassment complaint.",CYBER,CYBERBULLYING
+"Internet par harassment ho raha hai kya kare?",CYBER,CYBERBULLYING
+"How to report cyberbullying and online stalking in India?",CYBER,CYBERBULLYING
+"An online stalker is sending me threatening messages across multiple apps.",CYBER,CYBERBULLYING
+"Online stalking and cyberbullying report.",CYBER,CYBERBULLYING
+"Mujhe online threat mil rahe hain aur harass kar rahe hain.",CYBER,CYBERBULLYING
+"Can police take action against online cyberbullying?",CYBER,CYBERBULLYING
+"Someone is sharing my private chat screenshots publicly to humiliate me online.",CYBER,CYBERBULLYING
+"Online shaming and cyberbullying issue.",CYBER,CYBERBULLYING
+"Private chat leak karke badnam kar rahe hain.",CYBER,CYBERBULLYING
+"Cyber crime cyberbullying grievance.",CYBER,CYBERBULLYING
+"A user on Twitter is sending abusive slurs and harassing me continuously.",CYBER,CYBERBULLYING
+"Twitter cyberbullying dispute.",CYBER,CYBERBULLYING
+"Cyberbullying ka shikar hu.",CYBER,CYBERBULLYING
+"Online harassment and trolling.",CYBER,CYBERBULLYING
+"Social media par badnam kar raha hai.",CYBER,CYBERBULLYING
+"Cyberbullying legal complaint.",CYBER,CYBERBULLYING
+"Someone is sending malicious emails and harassing me online.",CYBER,CYBERBULLYING
+"Email cyberbullying report.",CYBER,CYBERBULLYING
+"Cyber bullying se pareshan hu.",CYBER,CYBERBULLYING
+"Cyber cell cyberbullying help.",CYBER,CYBERBULLYING
+"People are posting hateful comments on my videos just to bully me.",CYBER,CYBERBULLYING
+"Video comments cyberbullying issue.",CYBER,CYBERBULLYING
+"Online trollers pareshan kar rahe hain.",CYBER,CYBERBULLYING
+"Cyberbullying complaint procedure.",CYBER,CYBERBULLYING
+"What legal action can be taken against cyberbullies?",CYBER,CYBERBULLYING
+"Cyberbullying ke khilaf kahan report kare?",CYBER,CYBERBULLYING
+"An anonymous person is spreading malicious lies about me on Facebook groups.",CYBER,CYBERBULLYING
+"Facebook cyberbullying complaint.",CYBER,CYBERBULLYING
+"Fake rumors spread online to bully.",CYBER,CYBERBULLYING
+"Cyberbullying action steps.",CYBER,CYBERBULLYING
+"Someone is creating fake defamatory handles to harass me online.",CYBER,CYBERBULLYING
+"Defamatory cyberbullying dispute.",CYBER,CYBERBULLYING
+"Can I file a police case for cyberbullying?",CYBER,CYBERBULLYING
+"Cyberbullying FIR kaise darj kare?",CYBER,CYBERBULLYING
+"My landlord is refusing to return my security deposit even though I handed over the keys cleanly.",PROPERTY,SECURITY_DEPOSIT
+"Can a landlord deduct arbitrary amounts from my security deposit when I vacate?",PROPERTY,SECURITY_DEPOSIT
+"Malkin mera security deposit wapas nahi de raha ghar khali karne ke baad.",PROPERTY,SECURITY_DEPOSIT
+"The owner is holding my security deposit for six months without any valid reason.",PROPERTY,SECURITY_DEPOSIT
+"Landlord stopped picking up my calls and is withholding my advance deposit money.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit refund dispute with landlord.",PROPERTY,SECURITY_DEPOSIT
+"Advance deposit wapas nahi de raha malkin.",PROPERTY,SECURITY_DEPOSIT
+"How to legally recover security deposit from a landlord in India?",PROPERTY,SECURITY_DEPOSIT
+"My former landlord deducted the entire security deposit for normal wear and tear.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit deduction grievance.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit nahi de raha landlord ghar chhodne par.",PROPERTY,SECURITY_DEPOSIT
+"Can a landlord keep security deposit for painting charges without agreement clause?",PROPERTY,SECURITY_DEPOSIT
+"The property owner is delaying the refund of my security deposit indefinitely.",PROPERTY,SECURITY_DEPOSIT
+"Advance money refund issue with owner.",PROPERTY,SECURITY_DEPOSIT
+"Deposit ka paisa ruka hua hai landlord nahi de raha.",PROPERTY,SECURITY_DEPOSIT
+"Tenant security deposit complaint.",PROPERTY,SECURITY_DEPOSIT
+"Landlord refused to refund security deposit citing minor wall scratches.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit withholding issue.",PROPERTY,SECURITY_DEPOSIT
+"Deposit ka paisa nahi mil raha.",PROPERTY,SECURITY_DEPOSIT
+"Advance deposit dispute.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit wapas lene ke liye kya kare?",PROPERTY,SECURITY_DEPOSIT
+"Landlord security deposit legal help.",PROPERTY,SECURITY_DEPOSIT
+"My landlord returned only half of my security deposit without explanation.",PROPERTY,SECURITY_DEPOSIT
+"Partial security deposit refund issue.",PROPERTY,SECURITY_DEPOSIT
+"Deposit kaat liya pura landlord ne.",PROPERTY,SECURITY_DEPOSIT
+"Recovery of security deposit legal action.",PROPERTY,SECURITY_DEPOSIT
+"The owner is refusing to return my advance rent and deposit after early termination.",PROPERTY,SECURITY_DEPOSIT
+"Advance rent and deposit dispute.",PROPERTY,SECURITY_DEPOSIT
+"Advance rent wapas nahi mil raha.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit complaint procedure.",PROPERTY,SECURITY_DEPOSIT
+"What is the legal remedy for unpaid security deposit?",PROPERTY,SECURITY_DEPOSIT
+"Deposit refund ke liye kahan complain kare?",PROPERTY,SECURITY_DEPOSIT
+"Landlord is making false claims of property damage to keep my security deposit.",PROPERTY,SECURITY_DEPOSIT
+"False property damage claim for deposit.",PROPERTY,SECURITY_DEPOSIT
+"Jhoota damage bata kar deposit rakh liya.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit dispute resolution.",PROPERTY,SECURITY_DEPOSIT
+"The landlord's agent is asking for extra commission to release my security deposit.",PROPERTY,SECURITY_DEPOSIT
+"Security deposit agent extortion dispute.",PROPERTY,SECURITY_DEPOSIT
+"Can a tenant withhold last month's rent instead of security deposit?",PROPERTY,SECURITY_DEPOSIT
+"Security deposit case consumer court or civil court?",PROPERTY,SECURITY_DEPOSIT
+"Deposit wapas nahi mil raha police complaint kare kya?",PROPERTY,SECURITY_DEPOSIT
+"My landlord suddenly increased the rent by fifty percent in violation of our lease agreement.",PROPERTY,RENT_DISPUTE
+"We have a dispute over electricity bill calculations and maintenance charges with our landlord.",PROPERTY,RENT_DISPUTE
+"Landlord rent badha diya agreement ke beech me hi.",PROPERTY,RENT_DISPUTE
+"The landlord is harassing us over rent payment delays due to genuine bank issues.",PROPERTY,RENT_DISPUTE
+"There is a disagreement regarding who should pay for major structural repairs under the rent agreement.",PROPERTY,RENT_DISPUTE
+"Rent dispute between tenant and landlord.",PROPERTY,RENT_DISPUTE
+"Rent ko lekar jhagda ho raha hai landlord se.",PROPERTY,RENT_DISPUTE
+"How to resolve a rent hike dispute legally?",PROPERTY,RENT_DISPUTE
+"My landlord is refusing to accept monthly rent in cash or bank transfer to create a default case.",PROPERTY,RENT_DISPUTE
+"Refusal of rent acceptance dispute.",PROPERTY,RENT_DISPUTE
+"Landlord rent le nahi raha hai bolta hai khali karo.",PROPERTY,RENT_DISPUTE
+"Can a landlord increase rent without serving prior notice?",PROPERTY,RENT_DISPUTE
+"The tenant has not paid rent for the last four months and refuses to vacate.",PROPERTY,RENT_DISPUTE
+"Tenant non-payment of rent issue.",PROPERTY,RENT_DISPUTE
+"Tenant rent nahi de raha 4 mahine se.",PROPERTY,RENT_DISPUTE
+"Rent agreement dispute resolution.",PROPERTY,RENT_DISPUTE
+"Landlord is cutting off water supply because of a dispute over rent amount.",PROPERTY,RENT_DISPUTE
+"Utility cutoff rent dispute.",PROPERTY,RENT_DISPUTE
+"Pani kaat diya rent ke chakkar me.",PROPERTY,RENT_DISPUTE
+"Rent payment dispute.",PROPERTY,RENT_DISPUTE
+"Rent badhane ko lekar malkin pareshan kar raha hai.",PROPERTY,RENT_DISPUTE
+"Rent dispute legal advice.",PROPERTY,RENT_DISPUTE
+"My landlord is demanding extra charges not mentioned in the rent deed.",PROPERTY,RENT_DISPUTE
+"Extra charges rent dispute.",PROPERTY,RENT_DISPUTE
+"Rent agreement ka violation kar raha hai landlord.",PROPERTY,RENT_DISPUTE
+"Landlord tenant dispute help.",PROPERTY,RENT_DISPUTE
+"Tenant is subletting the apartment without permission leading to a rent dispute.",PROPERTY,RENT_DISPUTE
+"Subletting rent dispute issue.",PROPERTY,RENT_DISPUTE
+"Bina permission ke dusre ko de diya room.",PROPERTY,RENT_DISPUTE
+"Rent dispute complaint procedure.",PROPERTY,RENT_DISPUTE
+"What are my rights in a rent dispute with my landlord?",PROPERTY,RENT_DISPUTE
+"Rent dispute ke liye court ja sakte hain kya?",PROPERTY,RENT_DISPUTE
+"The landlord is disputing the inventory items included in the rented flat.",PROPERTY,RENT_DISPUTE
+"Inventory rent dispute report.",PROPERTY,RENT_DISPUTE
+"Saman ko lekar rent dispute.",PROPERTY,RENT_DISPUTE
+"Rent disagreement action steps.",PROPERTY,RENT_DISPUTE
+"My landlord is threatening to throw my belongings out over a minor rent delay.",PROPERTY,RENT_DISPUTE
+"Threatening rent dispute case.",PROPERTY,RENT_DISPUTE
+"Can a landlord lock the house over rent dispute?",PROPERTY,RENT_DISPUTE
+"Rent dispute ka kya solution hai?",PROPERTY,RENT_DISPUTE
+"My landlord is forcefully trying to evict me without giving any legal notice period.",PROPERTY,PROPERTY,EVICTION
+"Can a landlord throw my things out and evict me arbitrarily during the lease term?",PROPERTY,PROPERTY,EVICTION
+"Malkin zabardasti ghar khali karwa raha hai bina notice ke.",PROPERTY,PROPERTY,EVICTION
+"The owner has locked the main gate to illegally force me out of the rented property.",PROPERTY,PROPERTY,EVICTION
+"Landlord is threatening forcible eviction despite my rent being paid on time.",PROPERTY,PROPERTY,EVICTION
+"Illegal eviction threat by landlord.",PROPERTY,PROPERTY,EVICTION
+"Zabardasti ghar se nikalne ki dhamki de raha hai malkin.",PROPERTY,PROPERTY,EVICTION
+"How to stop illegal eviction by a landlord in India?",PROPERTY,PROPERTY,EVICTION
+"My landlord disconnected electricity and water to force me to vacate the house.",PROPERTY,PROPERTY,EVICTION
+"Forcible eviction through utility disconnection.",PROPERTY,PROPERTY,EVICTION
+"Bijli pani kaat diya ghar khali karwane ke liye.",PROPERTY,PROPERTY,EVICTION
+"Can a landlord evict a tenant without a court order?",PROPERTY,PROPERTY,EVICTION
+"The landlord came with local goons to forcefully evict me from the rented flat.",PROPERTY,PROPERTY,EVICTION
+"Forcible eviction goons threat.",PROPERTY,PROPERTY,EVICTION
+"Goonde bhej kar ghar khali karwa raha hai landlord.",PROPERTY,PROPERTY,EVICTION
+"Tenant eviction dispute complaint.",PROPERTY,PROPERTY,EVICTION
+"Landlord filed a false eviction notice based on fake grounds.",PROPERTY,PROPERTY,EVICTION
+"False eviction notice dispute.",PROPERTY,PROPERTY,EVICTION
+"Jhoota notice dekar ghar khali karwa raha hai.",PROPERTY,PROPERTY,EVICTION
+"Eviction harassment issue.",PROPERTY,PROPERTY,EVICTION
+"Malkin ghar khali karne ke liye bol raha hai achanak.",PROPERTY,PROPERTY,EVICTION
+"Eviction protection legal advice.",PROPERTY,PROPERTY,EVICTION
+"My landlord is threatening me daily to vacate the premises immediately.",PROPERTY,PROPERTY,EVICTION
+"Daily eviction threats by owner.",PROPERTY,PROPERTY,EVICTION
+"Ghar khali karne ke liye roz dhamki deta hai.",PROPERTY,PROPERTY,EVICTION
+"Landlord tenant eviction help.",PROPERTY,PROPERTY,EVICTION
+"The owner wants to sell the property and is forcing me to leave before lease ends.",PROPERTY,PROPERTY,EVICTION
+"Premature eviction due to property sale.",PROPERTY,PROPERTY,EVICTION
+"Ghar bechna hai isliye khali karwa raha hai.",PROPERTY,PROPERTY,EVICTION
+"Eviction complaint procedure.",PROPERTY,PROPERTY,EVICTION
+"What are tenant rights against unlawful eviction?",PROPERTY,PROPERTY,EVICTION
+"Bina notice ke eviction ke khilaf kahan complain kare?",PROPERTY,PROPERTY,EVICTION
+"My landlord is changing the main door locks while I am away to evict me.",PROPERTY,PROPERTY,EVICTION
+"Lockout eviction tactic by landlord.",PROPERTY,PROPERTY,EVICTION
+"Tala laga diya ghar ka saman andar hai.",PROPERTY,PROPERTY,EVICTION
+"Unlawful eviction dispute resolution.",PROPERTY,PROPERTY,EVICTION
+"The landlord served an eviction notice but refuses to return my advance payment.",PROPERTY,PROPERTY,EVICTION
+"Eviction notice with withheld deposit dispute.",PROPERTY,PROPERTY,EVICTION
+"Can a landlord evict a tenant with family during festival season?",PROPERTY,PROPERTY,EVICTION
+"Eviction case legal process in India.",PROPERTY,PROPERTY,EVICTION
+"Zabardasti eviction rokne ke liye kya kare?",PROPERTY,PROPERTY,EVICTION
+"My landlord is entering my rented apartment without my permission or prior notice when I am away.",PROPERTY,TENANT_RIGHTS
+"Can my landlord restrict my guests or dictate who can visit my rented home?",PROPERTY,TENANT_RIGHTS
+"Landlord bina permission ke mere ghar me ghus jata hai.",PROPERTY,TENANT_RIGHTS
+"The owner is interfering in my personal life and violating my right to quiet enjoyment.",PROPERTY,TENANT_RIGHTS
+"My landlord is imposing unreasonable building rules only on tenants and not owners.",PROPERTY,TENANT_RIGHTS
+"Tenant privacy and rights violation complaint.",PROPERTY,TENANT_RIGHTS
+"Malkin privacy violate kar raha hai bina bataye ghar aata hai.",PROPERTY,TENANT_RIGHTS
+"What are the basic legal rights of a tenant in India?",PROPERTY,TENANT_RIGHTS
+"The landlord is prohibiting me from keeping pets despite no clause in the agreement.",PROPERTY,TENANT_RIGHTS
+"Tenant rights regarding pets dispute.",PROPERTY,TENANT_RIGHTS
+"Pet rakhne nahi de raha landlord jabki agreement me hai.",PROPERTY,TENANT_RIGHTS
+"Can a landlord enter a rented house without tenant consent?",PROPERTY,TENANT_RIGHTS
+"My landlord is refusing to conduct necessary structural repairs required for safe living.",PROPERTY,TENANT_RIGHTS
+"Tenant right to essential repairs.",PROPERTY,TENANT_RIGHTS
+"Ghar ki repair nahi karwa raha landlord.",PROPERTY,TENANT_RIGHTS
+"Tenant rights grievance.",PROPERTY,TENANT_RIGHTS
+"Landlord is discriminating against me based on my food habits and religion.",PROPERTY,TENANT_RIGHTS
+"Tenant discrimination issue.",PROPERTY,TENANT_RIGHTS
+"Religion ke naam par pareshan kar raha hai landlord.",PROPERTY,TENANT_RIGHTS
+"Tenant rights dispute.",PROPERTY,TENANT_RIGHTS
+"Malkin restriction laga raha hai guest lane par.",PROPERTY,TENANT_RIGHTS
+"Tenant protection legal advice.",PROPERTY,TENANT_RIGHTS
+"My landlord is cutting off my internet and cable TV wires arbitrarily.",PROPERTY,TENANT_RIGHTS
+"Tenant utility interference issue.",PROPERTY,TENANT_RIGHTS
+"Internet cable kaat diya landlord ne.",PROPERTY,TENANT_RIGHTS
+"Tenant rights help.",PROPERTY,TENANT_RIGHTS
+"The owner is not allowing me to install an AC or necessary electrical appliances.",PROPERTY,TENANT_RIGHTS
+"Tenant appliance installation rights.",PROPERTY,TENANT_RIGHTS
+"AC lagane nahi de raha malkin.",PROPERTY,TENANT_RIGHTS
+"Tenant rights complaint procedure.",PROPERTY,TENANT_RIGHTS
+"What can a tenant do if the landlord violates privacy rights?",PROPERTY,TENANT_RIGHTS
+"Tenant rights violation ke khilaf kya kare?",PROPERTY,TENANT_RIGHTS
+"My landlord is demanding I attend all society meetings which violates my tenancy terms.",PROPERTY,TENANT_RIGHTS
+"Tenant society interference dispute.",PROPERTY,TENANT_RIGHTS
+"Society meeting me bulata hai zabardasti.",PROPERTY,TENANT_RIGHTS
+"Tenant rights resolution.",PROPERTY,TENANT_RIGHTS
+"The landlord is refusing to provide rent receipts despite multiple requests for tax filing.",PROPERTY,TENANT_RIGHTS
+"Tenant right to rent receipts.",PROPERTY,TENANT_RIGHTS
+"Rent receipt nahi de raha landlord tax file karna hai.",PROPERTY,TENANT_RIGHTS
+"Can a landlord dictate what time I can enter the building?",PROPERTY,TENANT_RIGHTS
+"Tenant rights legal remedies.",PROPERTY,TENANT_RIGHTS
+"Tenant rights protect karne ke liye kya steps le?",PROPERTY,TENANT_RIGHTS
+"My husband and his family are physically and mentally abusing me at home.",WOMEN,DOMESTIC_VIOLENCE
+"I am facing continuous domestic violence and cruelty from my in-laws.",WOMEN,DOMESTIC_VIOLENCE
+"Pati aur ससुराल wale mujhe marte hain aur pareshan karte hain.",WOMEN,DOMESTIC_VIOLENCE
+"My husband beats me up under the influence of alcohol and threatens me.",WOMEN,DOMESTIC_VIOLENCE
+"I am subjected to severe mental torture and physical abuse by my spouse every day.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence and abuse complaint.",WOMEN,DOMESTIC_VIOLENCE
+"Pati marpeet karta hai ghar par kya karu?",WOMEN,DOMESTIC_VIOLENCE
+"How can I get legal protection against domestic violence in India?",WOMEN,DOMESTIC_VIOLENCE
+"My in-laws lock me in a room and subject me to domestic abuse.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic abuse grievance.",WOMEN,DOMESTIC_VIOLENCE
+"Ghar me marpeet aur atyachar ho raha hai mere sath.",WOMEN,DOMESTIC_VIOLENCE
+"Can I file a case for domestic violence against my husband?",WOMEN,DOMESTIC_VIOLENCE
+"My husband verbally abuses and physically assaults me for trivial matters.",WOMEN,DOMESTIC_VIOLENCE
+"Spousal physical violence report.",WOMEN,DOMESTIC_VIOLENCE
+"Husband torture karta hai roj.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence legal help.",WOMEN,DOMESTIC_VIOLENCE
+"My husband and his mother are committing acts of domestic violence against me.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence family dispute.",WOMEN,DOMESTIC_VIOLENCE
+"Sasural wale marte hain aur taane dete hain.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence helpline query.",WOMEN,DOMESTIC_VIOLENCE
+"Pati daaru pee kar maarta hai.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence complaint procedure.",WOMEN,DOMESTIC_VIOLENCE
+"I was thrown out of my matrimonial home after facing brutal domestic violence.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence and forceful eviction.",WOMEN,DOMESTIC_VIOLENCE
+"Ghar se nikal diya marpeet karke.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence police complaint.",WOMEN,DOMESTIC_VIOLENCE
+"What are my rights under domestic violence laws?",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence ke khilaf kahan jaye?",WOMEN,DOMESTIC_VIOLENCE
+"My husband is threatening to kill me if I report his domestic violence.",WOMEN,DOMESTIC_VIOLENCE
+"Severe domestic violence threat case.",WOMEN,DOMESTIC_VIOLENCE
+"Jaan se marne ki dhamki deta hai pati.",WOMEN,DOMESTIC_VIOLENCE
+"Domestic violence protection order request.",WOMEN,DOMESTIC_VIOLENCE
+"My husband's family is torturing me physically for not bringing enough dowry.",WOMEN,DOMESTIC_DOWRY
+"My in-laws and husband are continuously harassing me and demanding a car and cash as dowry.",WOMEN,DOWRY
+"Sasural wale dahej ke liye pareshan kar rahe hain aur marte hain.",WOMEN,DOWRY
+"My husband's family threw me out of the house because my parents couldn't fulfill their dowry demands.",WOMEN,DOWRY
+"Dowry harassment and torture complaint by husband and in-laws.",WOMEN,DOWRY
+"Dowry harassment case filing process.",WOMEN,DOWRY
+"Dahej ke liye taane marte hain aur paise mangte hain.",WOMEN,DOWRY
+"How to file a dowry harassment complaint in India?",WOMEN,DOWRY
+"My in-laws are mentally torturing me demanding gold and cash dowry items.",WOMEN,DOWRY
+"Dowry mental harassment grievance.",WOMEN,DOWRY
+"Dahej nahi layi bolkar ghar se nikal diya.",WOMEN,DOWRY
+"Can I file a police case for dowry harassment against my husband?",WOMEN,DOWRY
+"My husband's family is demanding dowry and threatening divorce.",WOMEN,DOWRY
+"Dowry demand and threat report.",WOMEN,DOWRY
+"Dahej mang raha hai pati.",WOMEN,DOWRY
+"Dowry law legal help.",WOMEN,DOWRY
+"My in-laws physically abused me over unmet dowry demands.",WOMEN,DOWRY
+"Physical abuse for dowry dispute.",WOMEN,DOWRY
+"Dahej ke liye marpeet ki sasural walo ne.",WOMEN,DOWRY
+"Dowry harassment FIR query.",WOMEN,DOWRY
+"Dahej ke liye pareshan karte hain.",WOMEN,DOWRY
+"Dowry harassment complaint procedure.",WOMEN,DOWRY
+"My husband's family locked me up because my family couldn't pay dowry.",WOMEN,DOWRY
+"Dowry illegal confinement case.",WOMEN,DOWRY
+"Dahej ke liye kamre me band kar diya.",WOMEN,DOWRY
+"Dowry protection legal action.",WOMEN,DOWRY
+"What are the legal penalties for demanding dowry?",WOMEN,DOWRY
+"Dahej pratha ke khilaf kya kar sakte hain?",WOMEN,DOWRY
+"My husband is demanding cash in the name of dowry before letting me return home.",WOMEN,DOWRY
+"Dowry conditional return dispute.",WOMEN,DOWRY
+"Dahej doge tabhi ghar aane denge bol rahe hain.",WOMEN,DOWRY
+"Dowry dispute resolution.",WOMEN,DOWRY
+"My in-laws are publicly defaming my family over dowry issues.",WOMEN,DOWRY
+"Dowry defamation and harassment.",WOMEN,DOWRY
+"Can my family recover gifts given during wedding under dowry laws?",WOMEN,DOWRY
+"Dowry case legal procedure in India.",WOMEN,DOWRY
+"Dahej ka case kaise kare?",WOMEN,DOWRY
+"My senior manager at the office is making unwanted sexual advances and passing vulgar comments.",WOMEN,SEXUAL_HARASSMENT
+"I am facing sexual harassment at my workplace by a colleague and management is ignoring my complaints.",WOMEN,SEXUAL_HARASSMENT
+"Office me mere sath sexual harassment ho raha hai senior dwara.",WOMEN,SEXUAL_HARASSMENT
+"A coworker is sending me inappropriate sexually suggestive messages and touching me inappropriately.",WOMEN,SEXUAL_HARASSMENT
+"My boss conditioned my promotion on accepting his sexual advances.",WOMEN,SEXUAL_HARASSMENT
+"Workplace sexual harassment complaint.",WOMEN,SEXUAL_HARASSMENT
+"Office me sexual harassment ho raha hai kya kare?",WOMEN,SEXUAL_HARASSMENT
+"How to file a POSH complaint for sexual harassment at workplace?",WOMEN,SEXUAL_HARASSMENT
+"A client sexually harassed me during a business meeting and company won't take action.",WOMEN,SEXUAL_HARASSMENT
+"Client sexual harassment grievance.",WOMEN,SEXUAL_HARASSMENT
+"Office mein galat harkat karta hai manager.",WOMEN,SEXUAL_HARASSMENT
+"Can I file a police FIR for workplace sexual harassment?",WOMEN,SEXUAL_HARASSMENT
+"My supervisor makes vulgar gestures and passes sexual remarks daily.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment verbal abuse report.",WOMEN,SEXUAL_HARASSMENT
+"Manager galat baat bolta hai office me.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment legal help.",WOMEN,SEXUAL_HARASSMENT
+"My colleague stalked me outside the office and harassed me.",WOMEN,SEXUAL_HARASSMENT
+"Workplace stalking and sexual harassment.",WOMEN,SEXUAL_HARASSMENT
+"Office ke bahar stalk karta hai colleague.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment internal committee query.",WOMEN,SEXUAL_HARASSMENT
+"Office me inappropriate behavior face kar rahi hu.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment complaint procedure.",WOMEN,SEXUAL_HARASSMENT
+"I was terminated from my job because I reported sexual harassment to HR.",WOMEN,SEXUAL_HARASSMENT
+"Retaliation for sexual harassment complaint.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment ki complaint karne par job se nikal diya.",WOMEN,SEXUAL_HARASSMENT
+"POSH committee complaint process.",WOMEN,SEXUAL_HARASSMENT
+"What are my rights against sexual harassment at work?",WOMEN,SEXUAL_HARASSMENT
+"Office me sexual harassment ke khilaf kahan complain kare?",WOMEN,SEXUAL_HARASSMENT
+"A colleague touched me without consent at the office party.",WOMEN,SEXUAL_HARASSMENT
+"Physical sexual harassment at party report.",WOMEN,SEXUAL_HARASSMENT
+"Party me galat tarike se touch kiya coworker ne.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment dispute resolution.",WOMEN,SEXUAL_HARASSMENT
+"My manager insists on late-night meetings alone and makes sexual advances.",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment forced late meetings.",WOMEN,SEXUAL_HARASSMENT
+"Can an employer be punished for ignoring sexual harassment complaints?",WOMEN,SEXUAL_HARASSMENT
+"Sexual harassment case legal action in India.",WOMEN,SEXUAL_HARASSMENT
+"Office sexual harassment ka case kaise kare?",WOMEN,SEXUAL_HARASSMENT
+"My husband has abandoned me and refuses to provide any financial maintenance for me and our children.",WOMEN,MAINTENANCE
+"Can I legally claim monthly maintenance from my estranged husband who refuses to support us?",WOMEN,MAINTENANCE
+"Pati kharcha nahi de raha aur mujhe aur bachho ko chhod diya hai.",WOMEN,MAINTENANCE
+"My husband is not paying maintenance after separation and I have no source of income.",WOMEN,MAINTENANCE
+"I filed for divorce and want to know how to claim interim maintenance from my husband.",WOMEN,MAINTENANCE
+"Maintenance claim and spousal support dispute.",WOMEN,MAINTENANCE
+"Pati maintenance nahi de raha kharcha kaise chalega?",WOMEN,MAINTENANCE
+"How to file a maintenance case against husband in India?",WOMEN,MAINTENANCE
+"My husband has stopped sending money for household expenses and children's school fees.",WOMEN,MAINTENANCE
+"Child and spousal maintenance grievance.",WOMEN,MAINTENANCE
+"Bachho ka kharcha aur maintenance nahi de raha pati.",WOMEN,MAINTENANCE
+"Can a wife claim maintenance if she is living separately due to domestic violence?",WOMEN,MAINTENANCE
+"My husband earns a high salary but pays zero maintenance to me.",WOMEN,MAINTENANCE
+"High income husband non-maintenance report.",WOMEN,MAINTENANCE
+"Pati kamata hai par maintenance nahi deta.",WOMEN,MAINTENANCE
+"Maintenance legal help.",WOMEN,MAINTENANCE
+"My estranged husband is delaying court proceedings to avoid paying maintenance.",WOMEN,MAINTENANCE
+"Maintenance delay court dispute.",WOMEN,MAINTENANCE
+"Maintenance ka case lamba khich raha hai.",WOMEN,MAINTENANCE
+"Maintenance claim procedure.",WOMEN,MAINTENANCE
+"Pati kharcha nahi de raha court me case kaise kare?",WOMEN,MAINTENANCE
+"Maintenance legal advice.",WOMEN,MAINTENANCE
+"My husband has deserted me without financial support and I need maintenance.",WOMEN,MAINTENANCE
+"Desertion and maintenance claim.",WOMEN,MAINTENANCE
+"Bina kharcha diye chhod diya pati ne.",WOMEN,MAINTENANCE
+"Maintenance petition filing process.",WOMEN,MAINTENANCE
+"What are the criteria for calculating maintenance amount in India?",WOMEN,MAINTENANCE
+"Maintenance kitna mil sakta hai kaise decide hota hai?",WOMEN,MAINTENANCE
+"My husband refuses to pay maintenance despite court orders.",WOMEN,MAINTENANCE
+"Violation of court maintenance order dispute.",WOMEN,MAINTENANCE
+"Court ke order ke baad bhi maintenance nahi de raha.",WOMEN,MAINTENANCE
+"Can a working wife claim maintenance from her husband?",WOMEN,MAINTENANCE
+"Maintenance case legal action.",WOMEN,MAINTENANCE
+"Maintenance lene ke liye kya karna padega?",WOMEN,MAINTENANCE
