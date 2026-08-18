@@ -31,7 +31,9 @@ function Incident() {
 
       audioChunksRef.current = []
 
-      const mediaRecorder = new MediaRecorder(stream)
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm;codecs=opus",
+      })
 
       mediaRecorderRef.current = mediaRecorder
 
@@ -132,7 +134,7 @@ function Incident() {
       if (!response.success || !response.data) {
         setError(
           response.error?.message ??
-            "We couldn't process your request. Please try again.",
+          "We couldn't process your request. Please try again.",
         )
         return
       }
@@ -209,11 +211,10 @@ function Incident() {
                   type="button"
                   onClick={() => setLanguage("en")}
                   disabled={isSubmitting}
-                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${
-                    language === "en"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-black hover:bg-gray-100"
-                  }`}
+                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${language === "en"
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-black hover:bg-gray-100"
+                    }`}
                 >
                   English
                 </button>
@@ -222,11 +223,10 @@ function Incident() {
                   type="button"
                   onClick={() => setLanguage("hi")}
                   disabled={isSubmitting}
-                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${
-                    language === "hi"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-black hover:bg-gray-100"
-                  }`}
+                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${language === "hi"
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-black hover:bg-gray-100"
+                    }`}
                 >
                   हिंदी
                 </button>
@@ -243,11 +243,10 @@ function Incident() {
                 <button
                   type="button"
                   onClick={() => handleModeChange("text")}
-                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${
-                    inputMode === "text"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-black hover:bg-gray-100"
-                  }`}
+                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${inputMode === "text"
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-black hover:bg-gray-100"
+                    }`}
                 >
                   Write
                 </button>
@@ -255,11 +254,10 @@ function Incident() {
                 <button
                   type="button"
                   onClick={() => handleModeChange("voice")}
-                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${
-                    inputMode === "voice"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-black hover:bg-gray-100"
-                  }`}
+                  className={`rounded-md border px-5 py-2 text-sm font-medium transition-all ${inputMode === "voice"
+                    ? "border-black bg-black text-white"
+                    : "border-gray-300 bg-white text-black hover:bg-gray-100"
+                    }`}
                 >
                   Voice
                 </button>
