@@ -137,6 +137,18 @@ function Incident() {
         return
       }
 
+      if ("emptyTranscription" in response.data && response.data.emptyTranscription) {
+        setError(
+          "We could not detect clear speech in your recording. Please try speaking again or use text input.",
+        )
+        return
+      }
+
+      if (!response.data.incidentId) {
+        setError("We couldn't create the incident. Please try again.")
+        return
+      }
+
       navigate(`/result/${response.data.incidentId}`)
     } catch {
       setError(

@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+import { updateUserContext } from "@/lib/context"
+
 function Context() {
   const navigate = useNavigate()
 
@@ -8,7 +10,11 @@ function Context() {
   const [roleCategory, setRoleCategory] = useState("")
   const [vulnerabilityTags, setVulnerabilityTags] = useState<string[]>([])
 
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
   const toggleVulnerabilityTag = (tag: string) => {
+    setError("")
     setVulnerabilityTags((currentTags) =>
       currentTags.includes(tag)
         ? currentTags.filter((currentTag) => currentTag !== tag)
@@ -20,9 +26,36 @@ function Context() {
     navigate("/incident")
   }
 
-  const handleContinue = () => {
-    // API integration will be added after the UI is tested.
-    navigate("/incident")
+  const handleContinue = async () => {
+    if (isLoading) return
+
+    setError("")
+    setIsLoading(true)
+
+    try {
+      const response = await updateUserContext({
+        state: state || undefined,
+        roleCategory: roleCategory || undefined,
+        vulnerabilityTags:
+          vulnerabilityTags.length > 0 ? vulnerabilityTags : undefined,
+      })
+
+      if (!response.success || !response.data?.saved) {
+        setError(
+          response.error?.message ??
+            "Unable to save your context. Please try again.",
+        )
+        return
+      }
+
+      navigate("/incident")
+    } catch {
+      setError(
+        "Unable to connect to the server. Please try again.",
+      )
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -55,7 +88,10 @@ function Context() {
             <select
               id="state"
               value={state}
-              onChange={(event) => setState(event.target.value)}
+              onChange={(event) => {
+                setState(event.target.value)
+                setError("")
+              }}
               className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Select your state</option>
@@ -80,9 +116,10 @@ function Context() {
             <select
               id="role"
               value={roleCategory}
-              onChange={(event) =>
+              onChange={(event) => {
                 setRoleCategory(event.target.value)
-              }
+                setError("")
+              }}
               className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Select your role</option>
@@ -133,20 +170,29 @@ function Context() {
             </div>
           </div>
 
+          {/* Error */}
+          {error && (
+            <p className="text-sm text-destructive">
+              {error}
+            </p>
+          )}
+
           {/* Actions */}
           <div className="space-y-3 pt-2">
             <button
               type="button"
               onClick={handleContinue}
-              className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              disabled={isLoading}
+              className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Continue
+              {isLoading ? "Saving..." : "Continue"}
             </button>
 
             <button
               type="button"
               onClick={handleSkip}
-              className="w-full rounded-md border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+              disabled={isLoading}
+              className="w-full rounded-md border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
             >
               Skip for now
             </button>

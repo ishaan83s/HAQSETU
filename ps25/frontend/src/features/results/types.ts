@@ -9,6 +9,10 @@ export type OfficialResource = {
   name: string
   description: string
   url: string
+  section?: string | null
+  jurisdictionState?: "Maharashtra" | null
+  effectiveDate?: string | null
+  versionLabel?: string | null
 }
 
 export type LegalAid = {

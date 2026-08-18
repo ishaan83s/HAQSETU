@@ -11,6 +11,7 @@ Covers:
 from __future__ import annotations
 
 import base64
+import datetime
 import io
 import os
 import struct
@@ -24,6 +25,7 @@ os.environ.setdefault("OPENROUTER_MODEL_FALLBACK", "test-fallback")
 
 import pytest
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.testclient import TestClient
 
 from common.exceptions import (
@@ -31,6 +33,7 @@ from common.exceptions import (
     ErrorCode,
     app_exception_handler,
     generic_exception_handler,
+    validation_exception_handler,
 )
 from common.models import Incident, LegalAidContact, TriageResult, User, UserContext
 from incident.router import router as incident_router
@@ -81,6 +84,20 @@ def make_webm_bytes(duration_seconds: float = 1.0) -> bytes:
     duration_bytes = struct.pack(">f", duration_ms)
     info_chunk = b"\x15\x49\xa9\x66\x99\x2a\xd7\xb1\x83\x0f\x42\x40\x44\x89\x84" + duration_bytes
     return ebml_header + info_chunk + b"\x00" * 32
+
+
+def make_webm_without_duration() -> bytes:
+    """Generate minimal WebM container bytes missing the Duration metadata element."""
+    ebml_header = b"\x1a\x45\xdf\xa3\x9f\x42\x86\x81\x01\x42\xf7\x81\x01\x42\xf2\x81\x04\x42\xf3\x81\x08\x42\x82\x84webm"
+    info_chunk = b"\x15\x49\xa9\x66\x99\x2a\xd7\xb1\x83\x0f\x42\x40"
+    return ebml_header + info_chunk + b"\x00" * 32
+
+
+def make_webm_with_corrupt_duration() -> bytes:
+    """Generate minimal WebM container bytes with malformed/truncated duration element."""
+    ebml_header = b"\x1a\x45\xdf\xa3\x9f\x42\x86\x81\x01\x42\xf7\x81\x01\x42\xf2\x81\x04\x42\xf3\x81\x08\x42\x82\x84webm"
+    info_chunk = b"\x15\x49\xa9\x66\x99\x2a\xd7\xb1\x83\x0f\x42\x40\x44\x89\x84\x00"
+    return ebml_header + info_chunk
 
 
 def make_mock_db() -> AsyncMock:
@@ -269,6 +286,24 @@ def test_validate_and_decode_audio_oversized_webm_duration():
     with pytest.raises(AppException) as exc_info:
         validate_and_decode_audio(base64.b64encode(long_webm).decode())
     assert exc_info.value.code == ErrorCode.INVALID_INPUT
+
+
+def test_validate_and_decode_audio_missing_webm_duration_fails_closed():
+    """Test WebM with missing duration metadata is rejected (fail closed)."""
+    webm_no_dur = make_webm_without_duration()
+    with pytest.raises(AppException) as exc_info:
+        validate_and_decode_audio(base64.b64encode(webm_no_dur).decode())
+    assert exc_info.value.code == ErrorCode.INVALID_INPUT
+    assert "duration" in exc_info.value.message.lower()
+
+
+def test_validate_and_decode_audio_corrupt_webm_duration_fails_closed():
+    """Test WebM with corrupt/truncated duration metadata is rejected (fail closed)."""
+    webm_corrupt = make_webm_with_corrupt_duration()
+    with pytest.raises(AppException) as exc_info:
+        validate_and_decode_audio(base64.b64encode(webm_corrupt).decode())
+    assert exc_info.value.code == ErrorCode.INVALID_INPUT
+    assert "duration" in exc_info.value.message.lower()
 
 
 # ---------------------------------------------------------------------------
@@ -534,6 +569,8 @@ async def test_get_incident_own_incident_success(monkeypatch):
                         "section": "15",
                         "jurisdictionState": "Maharashtra",
                         "sourceUrl": "https://example.invalid",
+                        "effectiveDate": "1936-04-23",
+                        "versionLabel": "As amended 2017",
                     },
                 }
             ],
@@ -573,6 +610,21 @@ async def test_get_incident_own_incident_success(monkeypatch):
     for pub_issue in response.triage.issues:
         assert isinstance(pub_issue, PublicIssue)
         assert "confidence" not in pub_issue.model_dump()
+
+    # BUG-006: Verify public legal source fields are preserved and internal score is excluded
+    assert len(response.triage.cards.what_may_protect_you) == 1
+    src = response.triage.cards.what_may_protect_you[0].source
+    assert src.title == "Payment of Wages"
+    assert src.section == "15"
+    assert src.jurisdiction_state == "Maharashtra"
+    assert src.source_url == "https://example.invalid"
+    assert src.effective_date == datetime.date(1936, 4, 23)
+    assert src.version_label == "As amended 2017"
+    src_dict = src.model_dump(by_alias=True)
+    assert src_dict["effectiveDate"] == datetime.date(1936, 4, 23)
+    assert src_dict["versionLabel"] == "As amended 2017"
+    assert "score" not in src_dict
+    assert "confidence" not in src_dict
 
 
 @pytest.mark.asyncio
@@ -628,6 +680,7 @@ def create_test_app(current_user: User, db_session: AsyncMock) -> FastAPI:
     app = FastAPI()
     app.include_router(incident_router)
     app.add_exception_handler(AppException, app_exception_handler)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)
     app.add_exception_handler(Exception, generic_exception_handler)
 
     from auth.router import get_current_user
@@ -702,6 +755,12 @@ def test_api_post_incident_voice_success(monkeypatch):
     assert body["success"] is True
     assert body["error"] is None
     assert "incidentId" in body["data"]
+    assert isinstance(body["data"]["incidentId"], str)
+    # Valid UUID string format
+    assert uuid.UUID(body["data"]["incidentId"])
+    assert "triage" in body["data"]
+    assert "cards" in body["data"]["triage"]
+    assert "emptyTranscription" not in body["data"]
 
 
 def test_api_post_incident_empty_transcription_200(monkeypatch):
@@ -730,6 +789,7 @@ def test_api_post_incident_empty_transcription_200(monkeypatch):
     body = response.json()
     assert body["success"] is True
     assert body["data"] == {"emptyTranscription": True}
+    assert "incidentId" not in body["data"]
     assert body["error"] is None
 
 
@@ -749,6 +809,106 @@ def test_api_post_incident_validation_failure_empty_incident():
     body = response.json()
     assert body["success"] is False
     assert body["error"]["code"] == "EMPTY_INCIDENT"
+
+
+def test_api_post_incident_voice_missing_duration_fails_closed():
+    """Test POST /incidents with WebM missing duration returns HTTP 422 with INVALID_INPUT."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    webm_no_dur = make_webm_without_duration()
+    response = client.post(
+        "/incidents",
+        json={
+            "inputMode": "voice",
+            "language": "hi",
+            "audioBase64": base64.b64encode(webm_no_dur).decode(),
+        },
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "duration" in body["error"]["message"].lower()
+
+
+def test_api_post_incident_request_validation_missing_field_400():
+    """Test POST /incidents with missing required schema field returns HTTP 400 INVALID_INPUT in envelope."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    # Missing required field 'inputMode'
+    response = client.post(
+        "/incidents",
+        json={"language": "en", "text": "Missing input mode"},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "inputMode" in body["error"]["message"]
+
+
+def test_api_post_incident_request_validation_forbidden_extra_field_400():
+    """Test POST /incidents with forbidden extra field returns HTTP 400 INVALID_INPUT in envelope."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    # 'extraField' is forbidden by IncidentRequest ConfigDict(extra="forbid")
+    response = client.post(
+        "/incidents",
+        json={
+            "inputMode": "text",
+            "language": "en",
+            "text": "Valid text",
+            "extraField": "disallowed",
+        },
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "extraField" in body["error"]["message"]
+
+
+def test_api_main_app_request_validation_error_400():
+    """Test global main app RequestValidationError returns HTTP 400 with canonical INVALID_INPUT envelope."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    # Missing required field 'inputMode' on main app POST /incidents
+    response = client.post(
+        "/incidents",
+        json={"language": "en", "text": "Testing main app validation handler"},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "inputMode" in body["error"]["message"]
 
 
 def test_api_get_incident_success(monkeypatch):
@@ -893,3 +1053,515 @@ def test_api_put_user_context_success():
     assert body["error"] is None
     assert db.add.call_count == 1
     assert db.commit.call_count == 1
+
+
+def test_api_put_user_context_existing_partial_update():
+    """Test PUT /users/context updates existing context row preserving unset fields."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    existing_ctx = UserContext(
+        id=uuid.uuid4(),
+        user_id=user.id,
+        state="Maharashtra",
+        role_category="worker",
+        vulnerability_tags=["gig_worker"],
+    )
+
+    db = make_mock_db()
+    db_result = MagicMock()
+    db_result.scalar_one_or_none.return_value = existing_ctx
+    db.execute.return_value = db_result
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    # Update only roleCategory
+    response = client.put(
+        "/users/context",
+        json={
+            "roleCategory": "student",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"saved": True}
+    assert existing_ctx.state == "Maharashtra"
+    assert existing_ctx.role_category == "student"
+    assert existing_ctx.vulnerability_tags == ["gig_worker"]
+    assert db.add.call_count == 0  # Not re-added, updated in place
+    assert db.commit.call_count == 1
+
+
+def test_api_put_user_context_forbidden_extra_field_400():
+    """Test PUT /users/context with unrecognized field returns HTTP 400."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    response = client.put(
+        "/users/context",
+        json={
+            "state": "Maharashtra",
+            "unknownProperty": "malicious_or_typo",
+        },
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["error"]["code"] == "INVALID_INPUT"
+
+
+def test_api_put_user_context_unauthorized_401():
+    """Test PUT /users/context without authentication returns HTTP 401."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+
+    response = client.put(
+        "/users/context",
+        json={
+            "state": "Maharashtra",
+        },
+    )
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["error"]["code"] == "UNAUTHORIZED"
+
+
+def test_api_get_incident_unauthorized_401():
+    """Test GET /incidents/{id} without authentication returns HTTP 401 with canonical envelope."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    incident_id = uuid.uuid4()
+
+    response = client.get(f"/incidents/{incident_id}")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"
+    assert "Authentication required" in body["error"]["message"]
+
+
+def test_api_get_incident_invalid_uuid_400():
+    """Test GET /incidents/{id} with invalid UUID format returns HTTP 400 without traceback leakage."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    response = client.get("/incidents/invalid-uuid-format")
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "Traceback" not in body["error"]["message"]
+    assert "Exception" not in body["error"]["message"]
+
+
+def test_get_incident_empty_claims_and_evidence_lifecycle(monkeypatch):
+    """Test GET /incidents/{id} survives round-trip with empty claims and evidence, stripping confidence."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    incident_id = uuid.uuid4()
+
+    db_triage = TriageResult(
+        id=uuid.uuid4(),
+        incident_id=incident_id,
+        issues=[{"type": "wage_nonpayment", "confidence": 0.95}],
+        actor="employer",
+        jurisdiction_state="Maharashtra",
+        urgency="general",
+        response_cards={
+            "whatMayBeHappening": {"text": "Wages may be delayed or unpaid."},
+            "whatMayProtectYou": [],
+            "whatYouCanDoNext": [],
+        },
+    )
+    incident = Incident(
+        id=incident_id,
+        user_id=user.id,
+        raw_input_text="My wages were delayed",
+        input_mode="text",
+        language="en",
+    )
+    incident.triage = db_triage
+
+    monkeypatch.setattr("incident.service.get_for_issues", AsyncMock(return_value=[]))
+    monkeypatch.setattr(
+        "incident.service.get_primary_for_state",
+        AsyncMock(return_value=LegalAidContact(state="Maharashtra", name="MSLSA", contact_info="1800-22-2324")),
+    )
+
+    db = make_mock_db()
+    db_result = MagicMock()
+    db_result.scalar_one_or_none.return_value = incident
+    db.execute.return_value = db_result
+
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    response = client.get(f"/incidents/{incident_id}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+
+    data = body["data"]
+    assert data["incidentId"] == str(incident_id)
+
+    triage = data["triage"]
+    assert triage["actor"] == "employer"
+    assert triage["jurisdictionState"] == "Maharashtra"
+    assert triage["urgency"] == "general"
+
+    # Verify confidence float is stripped from public issues
+    assert len(triage["issues"]) == 1
+    assert triage["issues"][0] == {"type": "wage_nonpayment"}
+    assert "confidence" not in triage["issues"][0]
+
+    # Verify empty arrays and fields survive serialization exactly
+    cards = triage["cards"]
+    assert cards["whatMayBeHappening"] == {"text": "Wages may be delayed or unpaid."}
+    assert cards["whatMayProtectYou"] == []
+    assert cards["whatYouCanDoNext"] == []
+    assert cards["evidenceToKeep"] == []
+    assert cards["legalAid"] == {
+        "name": "MSLSA",
+        "contactInfo": "1800-22-2324",
+    }
+
+
+# ---------------------------------------------------------------------------
+# Integration Tests: Auth, Evidence & Legal Aid Routers
+# ---------------------------------------------------------------------------
+
+
+def test_api_auth_request_otp_success_200():
+    """Test POST /auth/request-otp with valid phone returns HTTP 200 with otpSent=True envelope."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "+919876543210"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"otpSent": True}
+    assert body["error"] is None
+
+
+def test_api_auth_request_otp_bare_10_digits_normalizes_and_succeeds_200():
+    """Test POST /auth/request-otp with bare 10-digit phone normalizes to +91 and succeeds."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "9876543210"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["data"] == {"otpSent": True}
+    assert body["error"] is None
+
+
+def test_api_auth_request_otp_invalid_phone_422():
+    """Test POST /auth/request-otp with invalid phone number returns HTTP 422 INVALID_PHONE."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/request-otp",
+        json={"phoneNumber": "12345"},
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_PHONE"
+
+
+def test_api_auth_verify_otp_success_200(monkeypatch):
+    """Test POST /auth/verify-otp with valid phone and mock OTP returns HTTP 200 with token and userId."""
+    from main import app
+    from common.db import get_async_session
+
+    user_id = uuid.uuid4()
+    mock_user = User(id=user_id, phone_number="+919876543210")
+
+    monkeypatch.setattr(
+        "auth.router.get_or_create_user",
+        AsyncMock(return_value=mock_user),
+    )
+
+    db = make_mock_db()
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "+919876543210", "otp": "123456"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert isinstance(body["data"]["token"], str)
+    assert len(body["data"]["token"]) > 20
+    assert body["data"]["userId"] == str(user_id)
+
+
+def test_api_auth_verify_otp_invalid_otp_401():
+    """Test POST /auth/verify-otp with incorrect OTP returns HTTP 401 INVALID_OTP."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "+919876543210", "otp": "000000"},
+    )
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_OTP"
+
+
+def test_api_auth_verify_otp_invalid_phone_422():
+    """Test POST /auth/verify-otp with invalid phone number returns HTTP 422 INVALID_PHONE."""
+    from main import app
+
+    client = TestClient(app)
+    response = client.post(
+        "/auth/verify-otp",
+        json={"phoneNumber": "bad_phone_number", "otp": "123456"},
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_PHONE"
+
+
+def test_api_get_evidence_success_200(monkeypatch):
+    """Test GET /evidence/{incident_type} returns HTTP 200 with checklist items."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    monkeypatch.setattr(
+        "evidence.router.get_for_incident_type",
+        AsyncMock(return_value={
+            "incidentType": "wage_nonpayment",
+            "items": ["salary slips", "bank statements", "written communication"],
+        }),
+    )
+
+    client = TestClient(app)
+    response = client.get("/evidence/wage_nonpayment")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert body["data"]["incidentType"] == "wage_nonpayment"
+    assert body["data"]["items"] == ["salary slips", "bank statements", "written communication"]
+
+
+def test_api_get_evidence_unsupported_fallback_200(monkeypatch):
+    """Test GET /evidence/{incident_type} with unknown type returns HTTP 200 fallback row."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    monkeypatch.setattr(
+        "evidence.router.get_for_incident_type",
+        AsyncMock(return_value={
+            "incidentType": "unsupported",
+            "items": ["any written communication", "payment records", "dated photos"],
+        }),
+    )
+
+    client = TestClient(app)
+    response = client.get("/evidence/unknown_type")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert body["data"]["incidentType"] == "unsupported"
+    assert len(body["data"]["items"]) == 3
+
+
+def test_api_get_evidence_unauthorized_401():
+    """Test GET /evidence/{incident_type} without auth returns HTTP 401 UNAUTHORIZED."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    response = client.get("/evidence/wage_nonpayment")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"
+
+
+def test_api_get_legal_aid_success_200(monkeypatch):
+    """Test GET /legal-aid returns HTTP 200 with matching contacts list."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    contact_1 = LegalAidContact(
+        id=uuid.uuid4(),
+        state="Maharashtra",
+        name="Maharashtra State Legal Services Authority (MSLSA)",
+        contact_info="Helpline: 1800-22-2324 / Phone: 022-22691395",
+        display_order=1,
+    )
+    contact_2 = LegalAidContact(
+        id=uuid.uuid4(),
+        state="Maharashtra",
+        name="High Court Legal Services Committee, Mumbai",
+        contact_info="Phone: 8591903603 / Email: hclsc-mum.mh@bhc.gov.in",
+        display_order=2,
+    )
+
+    monkeypatch.setattr(
+        "legalaid.router.get_for_state",
+        AsyncMock(return_value=[contact_1, contact_2]),
+    )
+
+    client = TestClient(app)
+    response = client.get("/legal-aid?state=Maharashtra")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert len(body["data"]["contacts"]) == 2
+    assert body["data"]["contacts"][0]["name"] == "Maharashtra State Legal Services Authority (MSLSA)"
+    assert body["data"]["contacts"][0]["contactInfo"] == "Helpline: 1800-22-2324 / Phone: 022-22691395"
+    assert body["data"]["contacts"][1]["name"] == "High Court Legal Services Committee, Mumbai"
+
+
+def test_api_get_legal_aid_unsupported_state_fallback_200(monkeypatch):
+    """Test GET /legal-aid with unknown state returns HTTP 200 with central fallback contacts."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    contact_central = LegalAidContact(
+        id=uuid.uuid4(),
+        state="central",
+        name="National Legal Services Authority (NALSA)",
+        contact_info="National Toll-Free Helpline: 15100",
+        display_order=1,
+    )
+
+    monkeypatch.setattr(
+        "legalaid.router.get_for_state",
+        AsyncMock(return_value=[contact_central]),
+    )
+
+    client = TestClient(app)
+    response = client.get("/legal-aid?state=Goa")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+    assert len(body["data"]["contacts"]) == 1
+    assert body["data"]["contacts"][0]["name"] == "National Legal Services Authority (NALSA)"
+
+
+def test_api_get_legal_aid_unauthorized_401():
+    """Test GET /legal-aid without authentication returns HTTP 401 UNAUTHORIZED."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    response = client.get("/legal-aid")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"

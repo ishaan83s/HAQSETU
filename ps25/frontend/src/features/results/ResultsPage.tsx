@@ -48,13 +48,11 @@ export default function ResultsPage() {
   const navigate = useNavigate()
   const { incidentId } = useParams<{ incidentId?: string }>()
   const [result, setResult] = useState<LegalAwarenessResult | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(Boolean(incidentId))
   const [error, setError] = useState("")
 
   useEffect(() => {
     if (!incidentId) {
-      setError("We couldn't find this incident.")
-      setIsLoading(false)
       return
     }
 
@@ -101,9 +99,10 @@ export default function ResultsPage() {
     }
   }, [incidentId])
 
+  const effectiveError = !incidentId ? "We couldn't find this incident." : error
   const activeResult = result
 
-  if (isLoading) {
+  if (isLoading && incidentId) {
     return (
       <AppShell>
         <div className="flex min-h-[60vh] items-center justify-center px-4">
@@ -121,7 +120,7 @@ export default function ResultsPage() {
     )
   }
 
-  if (error || !activeResult) {
+  if (effectiveError || !activeResult) {
     return (
       <AppShell>
         <div className="flex min-h-[60vh] items-center justify-center px-4">
@@ -130,7 +129,7 @@ export default function ResultsPage() {
               We couldn't load your result
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {error || "Please try again."}
+              {effectiveError || "Please try again."}
             </p>
             <Button
               className="mt-6"

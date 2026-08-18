@@ -180,3 +180,131 @@ def test_frozen_system_prompts_are_present():
     assert "If nothing reaches 0.5" in understanding_prompt
     assert "You are the triage reasoning component of PS-25" in generation_prompt
     assert "Every sentence in \"whatMayProtectYou\"" in generation_prompt
+
+
+@pytest.mark.asyncio
+async def test_generate_zero_sources_returns_guardrail_without_calling_llm(monkeypatch):
+    from triage.generation import generate
+
+    llm_called = False
+
+    async def fake_request(*_args, **_kwargs):
+        nonlocal llm_called
+        llm_called = True
+        return {}
+
+    monkeypatch.setattr("triage.generation._request", fake_request)
+
+    draft = await generate(
+        incident_text="Salary not paid",
+        language="en",
+        understanding=understanding([issue("wage_nonpayment", 0.9)]),
+        retrieval=RetrievalResult(results=[]),
+    )
+    assert not llm_called
+    assert draft.what_may_protect_you == []
+    assert draft.what_may_be_happening["text"] == "Wages remain unpaid"
+
+
+@pytest.mark.asyncio
+async def test_generate_unsupported_issue_returns_guardrail_without_calling_llm(monkeypatch):
+    from triage.generation import generate
+
+    llm_called = False
+
+    async def fake_request(*_args, **_kwargs):
+        nonlocal llm_called
+        llm_called = True
+        return {}
+
+    monkeypatch.setattr("triage.generation._request", fake_request)
+
+    custom_understanding = UnderstandingResult(
+        actor=None,
+        what="Citizen describes an issue outside supported legal categories",
+        issues=[issue("unsupported", 1.0)],
+        jurisdictionState=None,
+        urgency="general",
+    )
+
+    draft = await generate(
+        incident_text="Random consumer refund issue",
+        language="en",
+        understanding=custom_understanding,
+        retrieval=RetrievalResult(results=[]),
+    )
+    assert not llm_called
+    assert draft.what_may_protect_you == []
+    assert draft.what_may_be_happening["text"] == "Citizen describes an issue outside supported legal categories"
+
+
+@pytest.mark.asyncio
+async def test_generate_rejects_fabricated_source_id_and_raises_generation_error(monkeypatch):
+    from triage.exceptions import GenerationError
+    from triage.generation import generate
+
+    call_count = 0
+
+    async def fake_request(*_args, **_kwargs):
+        nonlocal call_count
+        call_count += 1
+        return {
+            "whatMayBeHappening": {"text": "Wages may be unpaid."},
+            "whatMayProtectYou": [{"text": "Claim with fake source", "sourceId": "FAKE-999"}],
+            "whatYouCanDoNext": [],
+        }
+
+    monkeypatch.setattr("triage.generation._request", fake_request)
+
+    source = LegalSource(
+        title="Valid Act",
+        section="10",
+        jurisdictionState="central",
+        sourceUrl="https://example.invalid/act",
+    )
+    retrieval = RetrievalResult(results=[
+        RetrievedChunk(source=source, sourceId="REAL-001", passage="Text", score=0.9)
+    ])
+
+    with pytest.raises(GenerationError, match="Grounded generation failed"):
+        await generate(
+            incident_text="Salary unpaid",
+            language="en",
+            understanding=understanding([issue("wage_nonpayment", 0.9)]),
+            retrieval=retrieval,
+        )
+
+    assert call_count == 3  # Tried primary, primary+corrective, fallback
+
+
+@pytest.mark.asyncio
+async def test_generate_accepts_valid_grounded_source_id(monkeypatch):
+    from triage.generation import generate
+
+    async def fake_request(*_args, **_kwargs):
+        return {
+            "whatMayBeHappening": {"text": "Wages may be unpaid."},
+            "whatMayProtectYou": [{"text": "Claim with real source", "sourceId": "REAL-001"}],
+            "whatYouCanDoNext": [{"text": "Next action", "sourceId": "REAL-001"}],
+        }
+
+    monkeypatch.setattr("triage.generation._request", fake_request)
+
+    source = LegalSource(
+        title="Valid Act",
+        section="10",
+        jurisdictionState="central",
+        sourceUrl="https://example.invalid/act",
+    )
+    retrieval = RetrievalResult(results=[
+        RetrievedChunk(source=source, sourceId="REAL-001", passage="Text", score=0.9)
+    ])
+
+    draft = await generate(
+        incident_text="Salary unpaid",
+        language="en",
+        understanding=understanding([issue("wage_nonpayment", 0.9)]),
+        retrieval=retrieval,
+    )
+    assert len(draft.what_may_protect_you) == 1
+    assert draft.what_may_protect_you[0].source_id == "REAL-001"

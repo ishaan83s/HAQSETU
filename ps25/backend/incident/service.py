@@ -16,6 +16,7 @@ from __future__ import annotations
 import base64
 import binascii
 import io
+import math
 import struct
 import uuid
 import wave
@@ -72,7 +73,12 @@ def _extract_webm_duration(audio_bytes: bytes) -> Optional[float]:
                     tc_bytes = header_chunk[tc_pos + 4 : tc_pos + 4 + tc_size]
                     timecode_scale = int.from_bytes(tc_bytes, byteorder="big")
 
+            if timecode_scale <= 0:
+                return None
+
             duration_secs = (raw_duration * timecode_scale) / 1e9
+            if math.isnan(duration_secs) or math.isinf(duration_secs) or duration_secs <= 0:
+                return None
             return duration_secs
     except Exception:
         pass
@@ -131,10 +137,15 @@ def validate_and_decode_audio(audio_base64: str) -> bytes:
         except Exception:
             pass
 
-    # Validate duration if WebM
+    # Validate duration if WebM (Fail closed if duration cannot be determined)
     if is_webm:
         duration = _extract_webm_duration(audio_bytes)
-        if duration is not None and duration > 60.0:
+        if duration is None:
+            raise AppException(
+                ErrorCode.INVALID_INPUT,
+                "Unable to determine WebM audio duration. Audio must contain valid duration metadata.",
+            )
+        if duration > 60.0:
             raise AppException(
                 ErrorCode.INVALID_INPUT,
                 f"Audio duration ({duration:.1f}s) exceeds 60 second limit.",
