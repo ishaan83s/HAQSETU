@@ -24,7 +24,13 @@ embeddings = np.load(f"{CHUNKS_DIR}/embeddings.npy")
 index = faiss.IndexFlatL2(embeddings.shape[1])
 index.add(embeddings)
 
-embed_model = SentenceTransformer("all-MiniLM-L6-v2")
+embed_model = None
+
+def get_embed_model():
+    global embed_model
+    if embed_model is None:
+        embed_model = SentenceTransformer("all-MiniLM-L6-v2")
+    return embed_model
 
 vectorizer = joblib.load(f"{CLASSIFIER_DIR}/tfidf_vectorizer.joblib")
 intent_model = joblib.load(f"{CLASSIFIER_DIR}/intent_classifier.joblib")
@@ -55,13 +61,13 @@ def retrieve(query, top_k=5, use_domain_filter=True):
             temp_index = faiss.IndexFlatL2(domain_embeddings.shape[1])
             temp_index.add(domain_embeddings)
 
-            query_vector = embed_model.encode([query])
+            query_vector = get_embed_model().encode([query])
             k = min(top_k, len(domain_indices))
             distances, local_idx = temp_index.search(query_vector, k)
             return [records[domain_indices[i]] for i in local_idx[0]]
 
     # Fallback: no domain predicted, or no chunks in that domain -> search everything
-    query_vector = embed_model.encode([query])
+    query_vector = get_embed_model().encode([query])
     distances, indices = index.search(query_vector, top_k)
     return [records[idx] for idx in indices[0]]
 
