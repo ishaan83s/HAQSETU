@@ -11,6 +11,7 @@ Covers:
 from __future__ import annotations
 
 import base64
+import datetime
 import io
 import os
 import struct
@@ -568,6 +569,8 @@ async def test_get_incident_own_incident_success(monkeypatch):
                         "section": "15",
                         "jurisdictionState": "Maharashtra",
                         "sourceUrl": "https://example.invalid",
+                        "effectiveDate": "1936-04-23",
+                        "versionLabel": "As amended 2017",
                     },
                 }
             ],
@@ -607,6 +610,21 @@ async def test_get_incident_own_incident_success(monkeypatch):
     for pub_issue in response.triage.issues:
         assert isinstance(pub_issue, PublicIssue)
         assert "confidence" not in pub_issue.model_dump()
+
+    # BUG-006: Verify public legal source fields are preserved and internal score is excluded
+    assert len(response.triage.cards.what_may_protect_you) == 1
+    src = response.triage.cards.what_may_protect_you[0].source
+    assert src.title == "Payment of Wages"
+    assert src.section == "15"
+    assert src.jurisdiction_state == "Maharashtra"
+    assert src.source_url == "https://example.invalid"
+    assert src.effective_date == datetime.date(1936, 4, 23)
+    assert src.version_label == "As amended 2017"
+    src_dict = src.model_dump(by_alias=True)
+    assert src_dict["effectiveDate"] == datetime.date(1936, 4, 23)
+    assert src_dict["versionLabel"] == "As amended 2017"
+    assert "score" not in src_dict
+    assert "confidence" not in src_dict
 
 
 @pytest.mark.asyncio

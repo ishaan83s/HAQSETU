@@ -27,6 +27,10 @@ export function adaptIncidentResult(
       name: claim.source.title,
       description: claim.text,
       url: claim.source.sourceUrl,
+      section: claim.source.section,
+      jurisdictionState: claim.source.jurisdictionState,
+      effectiveDate: claim.source.effectiveDate,
+      versionLabel: claim.source.versionLabel,
     }),
   )
 
