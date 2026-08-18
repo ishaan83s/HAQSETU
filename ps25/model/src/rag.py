@@ -2,7 +2,6 @@ import os
 import json
 import numpy as np
 import faiss
-from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 import joblib
 from dotenv import load_dotenv
@@ -26,9 +25,11 @@ index.add(embeddings)
 
 embed_model = None
 
+
 def get_embed_model():
     global embed_model
     if embed_model is None:
+        from sentence_transformers import SentenceTransformer
         embed_model = SentenceTransformer("all-MiniLM-L6-v2")
     return embed_model
 
