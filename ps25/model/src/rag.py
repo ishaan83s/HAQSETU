@@ -5,6 +5,10 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 import joblib
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 CHUNKS_DIR = "ps25/model/data/legalstuff/chunks"
 CLASSIFIER_DIR = "ps25/model/data/classifier"
@@ -103,7 +107,20 @@ def answer_query(query, top_k=5):
 
 
 # Test it
+# Test it
 if __name__ == "__main__":
-    result = answer_query("My Boss is not paying me.")
-    print("ANSWER:\n", result["answer"])
-    print("\nSOURCES:\n", result["sources"])
+  query = "My landlord refuses to return my security depo"
+  result = answer_query(query)
+
+  # Clean, structured output formatting
+  print("=" * 60)
+  print("⚖️  LEGAL AWARENESS ASSISTANT - RESULTS")
+  print("=" * 60)
+  print(f"\n📝 **User Query:** {query}")
+  print(f"\n---")
+  print(f"\n**💡 Answer:**\n{result['answer']}")
+  print(f"\n---")
+  print("📚 **Applicable Sources:**")
+  for source in set(result["sources"]):  # Deduplicate sources using set()
+    print(f"   • {source}")
+  print("=" * 60)
