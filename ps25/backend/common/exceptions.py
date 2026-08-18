@@ -21,6 +21,7 @@ from enum import Enum
 from typing import Dict, Optional, Tuple
 
 from fastapi import Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from common.response import error_response
@@ -230,6 +231,41 @@ async def generic_exception_handler(
     )
 
 
+async def validation_exception_handler(
+    request: Request,
+    exc: RequestValidationError,
+) -> JSONResponse:
+    """Global FastAPI handler for request validation errors (Pydantic/FastAPI).
+
+    Converts RequestValidationError into the canonical HAQSETU error envelope
+    with HTTP 400 and ErrorCode.INVALID_INPUT, without leaking raw internal details.
+    """
+
+    errors = exc.errors()
+    if errors:
+        first = errors[0]
+        loc = [str(x) for x in first.get("loc", ()) if x != "body"]
+        field = ".".join(loc) if loc else ""
+        msg = first.get("msg", "Invalid value").rstrip(".")
+        message = (
+            f"Invalid input for '{field}': {msg}."
+            if field
+            else f"Invalid input: {msg}."
+        )
+    else:
+        message = "Invalid request payload."
+
+    body = error_response(
+        code=ErrorCode.INVALID_INPUT.value,
+        message=message,
+    )
+
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content=body,
+    )
+
+
 __all__ = [
     "ErrorCode",
     "AppException",
@@ -240,4 +276,5 @@ __all__ = [
     "create_exception_handler",
     "app_exception_handler",
     "generic_exception_handler",
+    "validation_exception_handler",
 ]

@@ -24,6 +24,7 @@ os.environ.setdefault("OPENROUTER_MODEL_FALLBACK", "test-fallback")
 
 import pytest
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.testclient import TestClient
 
 from common.exceptions import (
@@ -31,6 +32,7 @@ from common.exceptions import (
     ErrorCode,
     app_exception_handler,
     generic_exception_handler,
+    validation_exception_handler,
 )
 from common.models import Incident, LegalAidContact, TriageResult, User, UserContext
 from incident.router import router as incident_router
@@ -628,6 +630,7 @@ def create_test_app(current_user: User, db_session: AsyncMock) -> FastAPI:
     app = FastAPI()
     app.include_router(incident_router)
     app.add_exception_handler(AppException, app_exception_handler)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)
     app.add_exception_handler(Exception, generic_exception_handler)
 
     from auth.router import get_current_user
@@ -749,6 +752,81 @@ def test_api_post_incident_validation_failure_empty_incident():
     body = response.json()
     assert body["success"] is False
     assert body["error"]["code"] == "EMPTY_INCIDENT"
+
+
+def test_api_post_incident_request_validation_missing_field_400():
+    """Test POST /incidents with missing required schema field returns HTTP 400 INVALID_INPUT in envelope."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    # Missing required field 'inputMode'
+    response = client.post(
+        "/incidents",
+        json={"language": "en", "text": "Missing input mode"},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "inputMode" in body["error"]["message"]
+
+
+def test_api_post_incident_request_validation_forbidden_extra_field_400():
+    """Test POST /incidents with forbidden extra field returns HTTP 400 INVALID_INPUT in envelope."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    # 'extraField' is forbidden by IncidentRequest ConfigDict(extra="forbid")
+    response = client.post(
+        "/incidents",
+        json={
+            "inputMode": "text",
+            "language": "en",
+            "text": "Valid text",
+            "extraField": "disallowed",
+        },
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "extraField" in body["error"]["message"]
+
+
+def test_api_main_app_request_validation_error_400():
+    """Test global main app RequestValidationError returns HTTP 400 with canonical INVALID_INPUT envelope."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app.dependency_overrides[get_current_user] = lambda: user
+    app.dependency_overrides[get_async_session] = lambda: db
+
+    client = TestClient(app)
+
+    # Missing required field 'inputMode' on main app POST /incidents
+    response = client.post(
+        "/incidents",
+        json={"language": "en", "text": "Testing main app validation handler"},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "inputMode" in body["error"]["message"]
 
 
 def test_api_get_incident_success(monkeypatch):

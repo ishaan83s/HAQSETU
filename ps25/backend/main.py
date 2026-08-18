@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from typing import Annotated, Optional
 
 from fastapi import APIRouter, Depends, FastAPI, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
@@ -25,6 +26,7 @@ from common.exceptions import (
     ErrorCode,
     app_exception_handler,
     generic_exception_handler,
+    validation_exception_handler,
 )
 from common.models import User, UserContext
 from common.response import APIResponse, error_response, success_response
@@ -80,6 +82,7 @@ app.add_middleware(
 
 # Register global exception handlers
 app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, generic_exception_handler)
 
 
