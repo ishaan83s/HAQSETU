@@ -1150,3 +1150,118 @@ def test_api_put_user_context_unauthorized_401():
     assert body["success"] is False
     assert body["error"]["code"] == "UNAUTHORIZED"
 
+
+def test_api_get_incident_unauthorized_401():
+    """Test GET /incidents/{id} without authentication returns HTTP 401 with canonical envelope."""
+    from main import app
+    from auth.router import get_current_user
+    from common.db import get_async_session
+
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(get_async_session, None)
+
+    client = TestClient(app)
+    incident_id = uuid.uuid4()
+
+    response = client.get(f"/incidents/{incident_id}")
+
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "UNAUTHORIZED"
+    assert "Authentication required" in body["error"]["message"]
+
+
+def test_api_get_incident_invalid_uuid_400():
+    """Test GET /incidents/{id} with invalid UUID format returns HTTP 400 without traceback leakage."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    response = client.get("/incidents/invalid-uuid-format")
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "Traceback" not in body["error"]["message"]
+    assert "Exception" not in body["error"]["message"]
+
+
+def test_get_incident_empty_claims_and_evidence_lifecycle(monkeypatch):
+    """Test GET /incidents/{id} survives round-trip with empty claims and evidence, stripping confidence."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    incident_id = uuid.uuid4()
+
+    db_triage = TriageResult(
+        id=uuid.uuid4(),
+        incident_id=incident_id,
+        issues=[{"type": "wage_nonpayment", "confidence": 0.95}],
+        actor="employer",
+        jurisdiction_state="Maharashtra",
+        urgency="general",
+        response_cards={
+            "whatMayBeHappening": {"text": "Wages may be delayed or unpaid."},
+            "whatMayProtectYou": [],
+            "whatYouCanDoNext": [],
+        },
+    )
+    incident = Incident(
+        id=incident_id,
+        user_id=user.id,
+        raw_input_text="My wages were delayed",
+        input_mode="text",
+        language="en",
+    )
+    incident.triage = db_triage
+
+    monkeypatch.setattr("incident.service.get_for_issues", AsyncMock(return_value=[]))
+    monkeypatch.setattr(
+        "incident.service.get_primary_for_state",
+        AsyncMock(return_value=LegalAidContact(state="Maharashtra", name="MSLSA", contact_info="1800-22-2324")),
+    )
+
+    db = make_mock_db()
+    db_result = MagicMock()
+    db_result.scalar_one_or_none.return_value = incident
+    db.execute.return_value = db_result
+
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    response = client.get(f"/incidents/{incident_id}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["error"] is None
+
+    data = body["data"]
+    assert data["incidentId"] == str(incident_id)
+
+    triage = data["triage"]
+    assert triage["actor"] == "employer"
+    assert triage["jurisdictionState"] == "Maharashtra"
+    assert triage["urgency"] == "general"
+
+    # Verify confidence float is stripped from public issues
+    assert len(triage["issues"]) == 1
+    assert triage["issues"][0] == {"type": "wage_nonpayment"}
+    assert "confidence" not in triage["issues"][0]
+
+    # Verify empty arrays and fields survive serialization exactly
+    cards = triage["cards"]
+    assert cards["whatMayBeHappening"] == {"text": "Wages may be delayed or unpaid."}
+    assert cards["whatMayProtectYou"] == []
+    assert cards["whatYouCanDoNext"] == []
+    assert cards["evidenceToKeep"] == []
+    assert cards["legalAid"] == {
+        "name": "MSLSA",
+        "contactInfo": "1800-22-2324",
+    }
+
+
