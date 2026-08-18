@@ -308,4 +308,3 @@ async def test_generate_accepts_valid_grounded_source_id(monkeypatch):
     )
     assert len(draft.what_may_protect_you) == 1
     assert draft.what_may_protect_you[0].source_id == "REAL-001"
-
