@@ -85,6 +85,20 @@ def make_webm_bytes(duration_seconds: float = 1.0) -> bytes:
     return ebml_header + info_chunk + b"\x00" * 32
 
 
+def make_webm_without_duration() -> bytes:
+    """Generate minimal WebM container bytes missing the Duration metadata element."""
+    ebml_header = b"\x1a\x45\xdf\xa3\x9f\x42\x86\x81\x01\x42\xf7\x81\x01\x42\xf2\x81\x04\x42\xf3\x81\x08\x42\x82\x84webm"
+    info_chunk = b"\x15\x49\xa9\x66\x99\x2a\xd7\xb1\x83\x0f\x42\x40"
+    return ebml_header + info_chunk + b"\x00" * 32
+
+
+def make_webm_with_corrupt_duration() -> bytes:
+    """Generate minimal WebM container bytes with malformed/truncated duration element."""
+    ebml_header = b"\x1a\x45\xdf\xa3\x9f\x42\x86\x81\x01\x42\xf7\x81\x01\x42\xf2\x81\x04\x42\xf3\x81\x08\x42\x82\x84webm"
+    info_chunk = b"\x15\x49\xa9\x66\x99\x2a\xd7\xb1\x83\x0f\x42\x40\x44\x89\x84\x00"
+    return ebml_header + info_chunk
+
+
 def make_mock_db() -> AsyncMock:
     """Create a mock database session with non-coroutine add method."""
     db = AsyncMock()
@@ -271,6 +285,24 @@ def test_validate_and_decode_audio_oversized_webm_duration():
     with pytest.raises(AppException) as exc_info:
         validate_and_decode_audio(base64.b64encode(long_webm).decode())
     assert exc_info.value.code == ErrorCode.INVALID_INPUT
+
+
+def test_validate_and_decode_audio_missing_webm_duration_fails_closed():
+    """Test WebM with missing duration metadata is rejected (fail closed)."""
+    webm_no_dur = make_webm_without_duration()
+    with pytest.raises(AppException) as exc_info:
+        validate_and_decode_audio(base64.b64encode(webm_no_dur).decode())
+    assert exc_info.value.code == ErrorCode.INVALID_INPUT
+    assert "duration" in exc_info.value.message.lower()
+
+
+def test_validate_and_decode_audio_corrupt_webm_duration_fails_closed():
+    """Test WebM with corrupt/truncated duration metadata is rejected (fail closed)."""
+    webm_corrupt = make_webm_with_corrupt_duration()
+    with pytest.raises(AppException) as exc_info:
+        validate_and_decode_audio(base64.b64encode(webm_corrupt).decode())
+    assert exc_info.value.code == ErrorCode.INVALID_INPUT
+    assert "duration" in exc_info.value.message.lower()
 
 
 # ---------------------------------------------------------------------------
@@ -752,6 +784,31 @@ def test_api_post_incident_validation_failure_empty_incident():
     body = response.json()
     assert body["success"] is False
     assert body["error"]["code"] == "EMPTY_INCIDENT"
+
+
+def test_api_post_incident_voice_missing_duration_fails_closed():
+    """Test POST /incidents with WebM missing duration returns HTTP 422 with INVALID_INPUT."""
+    user = User(id=uuid.uuid4(), phone_number="+919876543210")
+    db = make_mock_db()
+    app = create_test_app(user, db)
+    client = TestClient(app)
+
+    webm_no_dur = make_webm_without_duration()
+    response = client.post(
+        "/incidents",
+        json={
+            "inputMode": "voice",
+            "language": "hi",
+            "audioBase64": base64.b64encode(webm_no_dur).decode(),
+        },
+    )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["success"] is False
+    assert body["data"] is None
+    assert body["error"]["code"] == "INVALID_INPUT"
+    assert "duration" in body["error"]["message"].lower()
 
 
 def test_api_post_incident_request_validation_missing_field_400():
