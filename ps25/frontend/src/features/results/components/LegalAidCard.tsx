@@ -1,12 +1,16 @@
 import type { LegalAid } from "../types"
 
 type LegalAidCardProps = {
-  legalAid: LegalAid
+  legalAid: LegalAid | null | undefined
 }
 
 export default function LegalAidCard({
   legalAid,
 }: LegalAidCardProps) {
+  if (!legalAid || (!legalAid.name && !legalAid.contactInfo)) {
+    return null
+  }
+
   return (
     <section className="rounded-xl border bg-card p-5 sm:p-6 text-card-foreground shadow-sm">
       <div className="flex items-center gap-2.5 mb-4">
@@ -20,30 +24,30 @@ export default function LegalAidCard({
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M12 3v18" />
-            <path d="M5 6h14" />
-            <path d="M7 6l-3 7h6L7 6Z" />
-            <path d="M17 6l-3 7h6l-3-7Z" />
-            <path d="M4 18h16" />
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
           </svg>
         </div>
         <div>
           <h2 className="text-lg font-semibold tracking-tight">
-            Legal Aid
+            Connect to Legal Aid
           </h2>
           <p className="text-xs text-muted-foreground">
-            A legal-services contact associated with this guidance
+            Free and institutional legal assistance options
           </p>
         </div>
       </div>
 
       <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
-        <h3 className="text-sm font-semibold text-foreground">
-          {legalAid.name}
-        </h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-          {legalAid.contactInfo}
-        </p>
+        {legalAid.name && (
+          <h3 className="text-sm font-semibold text-foreground">
+            {legalAid.name}
+          </h3>
+        )}
+        {legalAid.contactInfo && (
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground font-medium">
+            {legalAid.contactInfo}
+          </p>
+        )}
       </div>
     </section>
   )

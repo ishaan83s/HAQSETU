@@ -1,4 +1,4 @@
-import type { ResultUrgency } from '../types'
+import type { ResultUrgency } from "../types"
 
 type UrgencyBannerProps = {
   urgency: ResultUrgency
@@ -6,36 +6,50 @@ type UrgencyBannerProps = {
 }
 
 const urgencyConfig: Record<
-  ResultUrgency,
+  string,
   { label: string; badgeClass: string; containerClass: string }
 > = {
-  emergency: {
-    label: 'Emergency Attention Required',
+  urgent: {
+    label: "Prompt Attention Recommended",
     badgeClass:
-      'bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200 border-red-300',
+      "bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/60 dark:text-amber-200 dark:border-amber-800",
     containerClass:
-      'border-red-200 bg-red-50/70 text-red-950 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-200',
+      "border-amber-200 bg-amber-50/60 text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-200",
   },
   high: {
-    label: 'High Urgency — Act Promptly',
+    label: "Prompt Attention Recommended",
     badgeClass:
-      'bg-amber-100 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200 border-amber-300',
+      "bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950/60 dark:text-amber-200 dark:border-amber-800",
     containerClass:
-      'border-amber-200 bg-amber-50/70 text-amber-950 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200',
+      "border-amber-200 bg-amber-50/60 text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-200",
+  },
+  time_sensitive: {
+    label: "Time-Sensitive Situation",
+    badgeClass:
+      "bg-blue-100 text-blue-900 border-blue-300 dark:bg-blue-950/60 dark:text-blue-200 dark:border-blue-800",
+    containerClass:
+      "border-blue-200 bg-blue-50/60 text-blue-950 dark:border-blue-900/40 dark:bg-blue-950/20 dark:text-blue-200",
   },
   medium: {
-    label: 'Moderate Urgency',
+    label: "Time-Sensitive Situation",
     badgeClass:
-      'bg-blue-100 text-blue-900 dark:bg-blue-900/60 dark:text-blue-200 border-blue-300',
+      "bg-blue-100 text-blue-900 border-blue-300 dark:bg-blue-950/60 dark:text-blue-200 dark:border-blue-800",
     containerClass:
-      'border-blue-200 bg-blue-50/70 text-blue-950 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-200',
+      "border-blue-200 bg-blue-50/60 text-blue-950 dark:border-blue-900/40 dark:bg-blue-950/20 dark:text-blue-200",
+  },
+  general: {
+    label: "General Awareness",
+    badgeClass:
+      "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700",
+    containerClass:
+      "border-slate-200 bg-slate-50/70 text-slate-900 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200",
   },
   low: {
-    label: 'Standard Awareness',
+    label: "General Awareness",
     badgeClass:
-      'bg-emerald-100 text-emerald-900 dark:bg-emerald-900/60 dark:text-emerald-200 border-emerald-300',
+      "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700",
     containerClass:
-      'border-emerald-200 bg-emerald-50/70 text-emerald-950 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200',
+      "border-slate-200 bg-slate-50/70 text-slate-900 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200",
   },
 }
 
@@ -43,7 +57,7 @@ export default function UrgencyBanner({
   urgency,
   message,
 }: UrgencyBannerProps) {
-  const config = urgencyConfig[urgency] || urgencyConfig.high
+  const config = urgencyConfig[urgency] || urgencyConfig.general
 
   return (
     <section
@@ -53,7 +67,7 @@ export default function UrgencyBanner({
       <div className="flex items-start gap-3">
         <div className="mt-0.5 shrink-0">
           <svg
-            className="h-5 w-5 text-current opacity-90"
+            className="h-5 w-5 text-current opacity-85"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -61,9 +75,9 @@ export default function UrgencyBanner({
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-            <line x1="12" y1="9" x2="12" y2="13" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
         </div>
         <div className="space-y-1">

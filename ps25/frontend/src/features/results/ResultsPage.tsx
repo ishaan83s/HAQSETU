@@ -1,48 +1,16 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import AppShell from '@/components/AppShell'
-import { Button } from '@/components/ui/button'
-import { getIncident } from '@/lib/incidents'
-import { adaptIncidentResult } from './incidentAdapter'
-import type { LegalAwarenessResult } from './types'
-import UrgencyBanner from './components/UrgencyBanner'
-import EvidenceChecklist from './components/EvidenceChecklist'
-import NextStepsList from './components/NextStepsList'
-import OfficialResources from './components/OfficialResources'
-import LegalAidCard from './components/LegalAidCard'
-
-type ResultSectionProps = {
-  title: string
-  subtitle?: string
-  icon?: ReactNode
-  children: ReactNode
-}
-
-function ResultSection({
-  title,
-  subtitle,
-  icon,
-  children,
-}: ResultSectionProps) {
-  return (
-    <section className="rounded-xl border bg-card p-5 sm:p-6 text-card-foreground shadow-sm">
-      <div className="flex items-center gap-2.5 mb-3">
-        {icon && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            {icon}
-          </div>
-        )}
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground">{subtitle}</p>
-          )}
-        </div>
-      </div>
-      {children}
-    </section>
-  )
-}
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import AppShell from "@/components/AppShell"
+import { Button } from "@/components/ui/button"
+import { getIncident } from "@/lib/incidents"
+import { adaptIncidentResult } from "./incidentAdapter"
+import type { LegalAwarenessResult } from "./types"
+import UrgencyBanner from "./components/UrgencyBanner"
+import WhatMayProtectYou from "./components/WhatMayProtectYou"
+import EvidenceChecklist from "./components/EvidenceChecklist"
+import NextStepsList from "./components/NextStepsList"
+import OfficialResources from "./components/OfficialResources"
+import LegalAidCard from "./components/LegalAidCard"
 
 export default function ResultsPage() {
   const navigate = useNavigate()
@@ -81,9 +49,7 @@ export default function ResultsPage() {
         }
       } catch {
         if (!cancelled) {
-          setError(
-            "We couldn't connect to the service. Please try again.",
-          )
+          setError("We couldn't connect to the service. Please try again.")
         }
       } finally {
         if (!cancelled) {
@@ -107,9 +73,22 @@ export default function ResultsPage() {
       <AppShell>
         <div className="flex min-h-[60vh] items-center justify-center px-4">
           <div className="text-center">
-            <div className="mb-4 text-4xl">⏳</div>
-            <h1 className="text-2xl font-semibold">
-              Preparing your result
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <svg
+                className="h-6 w-6 animate-pulse"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
+              Loading your guidance
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Please wait while we load your legal-awareness guidance.
@@ -124,17 +103,14 @@ export default function ResultsPage() {
     return (
       <AppShell>
         <div className="flex min-h-[60vh] items-center justify-center px-4">
-          <div className="w-full max-w-md text-center">
-            <h1 className="text-2xl font-semibold">
+          <div className="w-full max-w-md text-center rounded-xl border border-border bg-card p-6 shadow-sm">
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground">
               We couldn't load your result
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               {effectiveError || "Please try again."}
             </p>
-            <Button
-              className="mt-6"
-              onClick={() => navigate("/incident")}
-            >
+            <Button className="mt-6" onClick={() => navigate("/incident")}>
               Start a New Query
             </Button>
           </div>
@@ -145,54 +121,40 @@ export default function ResultsPage() {
 
   return (
     <AppShell>
-      <div className="space-y-6 pb-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-8 pb-16">
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
           <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                HAQSETU Legal Awareness
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="inline-flex items-center rounded-md bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                HAQSETU Guidance
               </span>
-              {incidentId && (
-                <span className="inline-flex items-center rounded-full border border-border bg-muted/60 px-2.5 py-0.5 text-xs font-medium text-foreground">
-                  Case ID: #{incidentId}
+              {activeResult.possibleIssues.map((issue) => (
+                <span
+                  key={issue}
+                  className="inline-flex items-center rounded-md border border-border bg-muted/40 px-2.5 py-0.5 text-xs font-medium text-muted-foreground"
+                >
+                  {issue}
+                </span>
+              ))}
+              {activeResult.jurisdictionState && (
+                <span className="inline-flex items-center rounded-md border border-border bg-muted/40 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                  {activeResult.jurisdictionState}
                 </span>
               )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Here is your next-step guide
+              Here's what we found
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Personalized legal awareness, evidence preservation, and verified
-              resources.
+              Plain-language summary of your situation, relevant legal provisions, and recommended actions.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.print()}
-              className="text-xs"
-            >
-              <svg
-                className="mr-1.5 h-3.5 w-3.5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 6 2 18 2 18 9" />
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                <rect width="12" height="8" x="6" y="14" />
-              </svg>
-              Print / Save
-            </Button>
+          <div className="flex items-center gap-2 shrink-0">
             <Button
               size="sm"
-              onClick={() => navigate('/incident')}
+              onClick={() => navigate("/incident")}
               className="text-xs"
             >
               New Query
@@ -200,47 +162,56 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        {/* Urgency Alert Banner */}
-        <UrgencyBanner
-          urgency={activeResult.urgency}
-          message={activeResult.urgencyMessage}
-        />
+        {/* Urgency Alert Banner (if urgent or time-sensitive) */}
+        {(activeResult.urgency === "urgent" ||
+          activeResult.urgency === "time_sensitive" ||
+          activeResult.urgency === "high" ||
+          activeResult.urgency === "medium") && (
+          <UrgencyBanner
+            urgency={activeResult.urgency}
+            message={activeResult.urgencyMessage}
+          />
+        )}
 
-        {/* What We Understood Section */}
-        <ResultSection
-          title="What We Understood"
-          subtitle="Summary of your situation and potential legal considerations"
-          icon={
-            <svg
-              className="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="16" x2="12" y2="12" />
-              <line x1="12" y1="8" x2="12.01" y2="8" />
-            </svg>
-          }
-        >
-          <div className="space-y-3 text-sm text-foreground/90">
-            <div className="rounded-lg bg-muted/40 p-3.5 border border-border/50">
-              <p className="font-medium text-foreground mb-1 text-xs uppercase tracking-wider text-muted-foreground">
-                Incident Overview
-              </p>
-              <p className="leading-relaxed">{activeResult.incidentSummary}</p>
+        {/* What May Be Happening */}
+        {activeResult.incidentSummary && (
+          <section className="rounded-xl border bg-card p-5 sm:p-6 text-card-foreground shadow-sm">
+            <div className="flex items-center gap-2.5 mb-3.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold tracking-tight">
+                  What May Be Happening
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Summary of the situation and primary legal assessment
+                </p>
+              </div>
             </div>
-            <div className="rounded-lg bg-muted/40 p-3.5 border border-border/50">
-              <p className="font-medium text-foreground mb-1 text-xs uppercase tracking-wider text-muted-foreground">
-                Key Considerations
+
+            <div className="rounded-lg bg-muted/30 p-4 border border-border/60">
+              <p className="text-sm sm:text-base leading-relaxed text-foreground font-normal whitespace-pre-line">
+                {activeResult.incidentSummary}
               </p>
-              <p className="leading-relaxed">{activeResult.possibleIssue}</p>
             </div>
-          </div>
-        </ResultSection>
+          </section>
+        )}
+
+        {/* What May Protect You */}
+        <WhatMayProtectYou claims={activeResult.whatMayProtectYou} />
 
         {/* Evidence Preservation Checklist */}
         <EvidenceChecklist items={activeResult.evidenceChecklist} />
@@ -248,33 +219,20 @@ export default function ResultsPage() {
         {/* Actionable Next Steps */}
         <NextStepsList steps={activeResult.nextSteps} />
 
-        {/* Official Resources */}
+        {/* Official Legal Sources (Progressively Disclosed) */}
         <OfficialResources resources={activeResult.officialResources} />
 
-        {/* Legal Aid */}
+        {/* Connect to Legal Aid */}
         <LegalAidCard legalAid={activeResult.legalAid} />
 
         {/* Legal Disclaimer */}
-        <div className="rounded-xl border border-muted-foreground/20 bg-muted/30 p-4 text-xs leading-relaxed text-muted-foreground">
-          <div className="flex items-start gap-2.5">
-            <svg
-              className="h-4 w-4 shrink-0 mt-0.5 text-muted-foreground"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <p>
-              <strong className="font-semibold text-foreground">
-                Disclaimer:{' '}
-              </strong>
-              {activeResult.disclaimer}
-            </p>
-          </div>
+        <div className="rounded-xl border border-border/80 bg-muted/20 p-4 text-xs leading-relaxed text-muted-foreground">
+          <p>
+            <strong className="font-semibold text-foreground">
+              Disclaimer:{" "}
+            </strong>
+            {activeResult.disclaimer}
+          </p>
         </div>
       </div>
     </AppShell>
